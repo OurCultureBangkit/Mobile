@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">OurCulture</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pilih_dari_galeri">Pilih dari Galeri</string>
+    <string name="ambil_dari_kamera">Ambil dari Kamera</string>
+    <string name="deteksi_gambar">Deteksi Gambar</string>
+
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!--    Login Activity-->
+    <string name="create_an_account">Didn\'t have any account?</string>
+    <string name="sign_up_here"><u>Sign Up Here</u></string>
+    <string name="sign_in_here"><u>Sign In Here</u></string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="password">Password</string>
+    <string name="repeatpassword">Repeat Password</string>
+    <string name="username">Username</string>
+    <string name="logout">LogOut</string>
+    <string name="email">Email</string>
+
+    <string name="retry">Coba lagi</string>
+
+    <string name="log_out">Log out</string>
+    <string name="add_to_wishlist">Add to Wishlist</string>
+    <string name="add_comment">Add Comment…</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eleifend, libero id vehicula consequat, risus velit posuere libero, vel commodo odio velit a neque. Sed vitae neque sit amet leo tristique mattis. Nullam vitae purus euismod, vestibulum enim vel, posuere enim. Nunc non augue nec orci aliquet hendrerit. Vestibulum laoreet euismod orci, eu sodales dolor finibus et. Integer in metus vitae odio dictum pharetra. Phasellus elementum tristique ante, vel imperdiet elit volutpat id. Maecenas consectetur neque in urna vestibulum, non congue sem vulputate. Praesent ultricies, leo nec euismod efficitur, tortor enim eleifend justo, nec varius mi ligula vel tortor.</string>
+    <string name="deskripsi">Deskripsi</string>
+
+    <string name="upload">Unggah</string>
+    <string name="gallery">Galeri</string>
+    <string name="camera">Kamera</string>
+    <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
+    <string name="comment">Comment</string>
+    <string name="nama_barang">Nama Barang</string>
+    <string name="harga">Harga</string>
+    <string name="default_web_client_id">694116184860-r853gotghps38ppt4us4pe7ilfrtp44r.apps.googleusercontent.com</string>
+    <string name="already_have_an_account">Already Have an Account?</string>
+    <string name="change_picture">Change Picture</string>
+    <string name="update">Update</string>
+
+</resources>
