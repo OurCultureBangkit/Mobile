@@ -27,7 +27,7 @@ interface ApiService {
     suspend fun register(
         @Field("username") username: String,
         @Field("password") password: String,
-        @Field("repeat_password") repeatPassword: String,
+        @Field("password_repeat") repeatPassword: String,
         @Field("email") email: String,
     ): RegisterResponse
 

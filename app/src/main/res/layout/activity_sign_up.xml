@@ -46,7 +46,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp">
+        android:layout_marginEnd="8dp"
+        app:endIconMode="password_toggle">
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etSignUpPwd"
@@ -67,13 +68,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tiPwd_sign_up"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp">
+        android:layout_marginEnd="8dp"
+        app:endIconMode="password_toggle">
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etSignUpPwdRpt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/repeatpassword"
+            android:hint="@string/confirmpassword"
             android:inputType="textPassword"/>
 
     </com.google.android.material.textfield.TextInputLayout>

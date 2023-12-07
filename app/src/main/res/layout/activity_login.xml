@@ -42,7 +42,8 @@
         app:layout_constraintStart_toStartOf="@+id/btnLogin"
         app:layout_constraintEnd_toEndOf="@id/btnLogin"
         android:layout_marginBottom="16dp"
-        app:startIconDrawable="@drawable/lock">
+        app:startIconDrawable="@drawable/lock"
+        app:endIconMode="password_toggle">
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etPwd"

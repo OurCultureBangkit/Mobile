@@ -18,7 +18,7 @@
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="sign_up">Sign Up</string>
     <string name="password">Password</string>
-    <string name="repeatpassword">Repeat Password</string>
+    <string name="confirmpassword">Confirm Password</string>
     <string name="username">Username</string>
     <string name="logout">LogOut</string>
     <string name="email">Email</string>
