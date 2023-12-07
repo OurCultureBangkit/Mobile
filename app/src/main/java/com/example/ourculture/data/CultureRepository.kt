@@ -19,6 +19,7 @@ import com.example.ourculture.database.CultureDatabase
 import com.example.ourculture.data.remote.retrofit.ApiService
 import com.example.ourculture.data.remote.retrofit.response.BarangItem
 import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
+import com.example.ourculture.data.remote.retrofit.response.PostWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.SignInGoogleResponse
 import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
 import com.google.gson.Gson
@@ -166,6 +167,19 @@ class CultureRepository private constructor(
         emit(Result.Loading)
         try {
             val response = apiService.uploadToMarket(token, file, harga, title, description, location, stock)
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+    }
+
+    fun postUserWishlist(token: String, barangId: Int): LiveData<Result<PostWishlistResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.postUserWishlist(token, barangId)
             emit(Result.Success(response))
         } catch (e: HttpException) {
             val jsonInString = e.response()?.errorBody()?.string()

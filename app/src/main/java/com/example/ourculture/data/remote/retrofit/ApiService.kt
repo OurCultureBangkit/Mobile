@@ -6,6 +6,7 @@ import com.example.ourculture.data.remote.retrofit.response.DetailStoryResponse
 import com.example.ourculture.data.remote.retrofit.response.FileUploadResponse
 import com.example.ourculture.data.remote.retrofit.response.ListStoryItem
 import com.example.ourculture.data.remote.retrofit.response.LoginResponse
+import com.example.ourculture.data.remote.retrofit.response.PostWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.RegisterResponse
 import com.example.ourculture.data.remote.retrofit.response.SignInGoogleResponse
 import com.example.ourculture.data.remote.retrofit.response.Story
@@ -59,6 +60,12 @@ interface ApiService {
     ): StoryResponse
     @GET("market/barang")
     suspend fun getAllMarket(): BarangResponse
+    @FormUrlEncoded
+    @POST("market/wishlist")
+    suspend fun postUserWishlist(
+        @Header("Authorization") token : String,
+        @Field("barangId") barangId: Int?,
+    ): PostWishlistResponse
 
     @GET("stories")
     suspend fun getStoriesWithLocation(
