@@ -44,5 +44,6 @@
     <string name="update">Update</string>
     <string name="location">Location</string>
     <string name="stock">Stock</string>
+    <string name="post_by">Post By</string>
 
 </resources>

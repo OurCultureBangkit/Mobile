@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 class DetailCultureViewModel(private val cultureRepository: CultureRepository): ViewModel() {
     fun getDetailStories(token: String, idStory: String) = cultureRepository.getDetailStories(token, idStory)
 
+
     fun getSession(): LiveData<UserModel> {
         return cultureRepository.getSession().asLiveData()
     }

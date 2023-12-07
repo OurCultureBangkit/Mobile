@@ -18,11 +18,11 @@ class MarketplaceAdapter: ListAdapter<BarangItem, MarketplaceAdapter.MyViewHolde
                 .load(barangItem.images[0])
                 .into(binding.imgPoster)
             binding.tvTitle.text = barangItem.title
-            binding.tvPrice.text = "Rp.${barangItem.harga.toString()}"
+            binding.tvPrice.text = "Rp.${barangItem.harga}"
             binding.tvLocation.text = barangItem.location
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, DetailMarketplaceActivity::class.java)
-                intent.putExtra(DetailMarketplaceActivity.EXTRA_ID, barangItem.id)
+                intent.putExtra(DetailMarketplaceActivity.EXTRA_ID, barangItem.id.toString())
                 itemView.context.startActivity(intent)
             }
         }

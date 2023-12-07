@@ -1,6 +1,7 @@
 package com.example.ourculture.data.remote.retrofit
 
 import com.example.ourculture.data.remote.retrofit.response.BarangResponse
+import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
 import com.example.ourculture.data.remote.retrofit.response.DetailStoryResponse
 import com.example.ourculture.data.remote.retrofit.response.FileUploadResponse
 import com.example.ourculture.data.remote.retrofit.response.ListStoryItem
@@ -74,7 +75,7 @@ interface ApiService {
     @GET("market/barang/detail/{id}")
     suspend fun getDetailMarketItem(
         @Path("id") id: String
-    ): DetailStoryResponse
+    ): DetailBarangResponse
 
     @Multipart
     @POST("stories")

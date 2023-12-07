@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.ourculture.data.CultureRepository
 import com.example.ourculture.di.Injection
 import com.example.ourculture.ui.detail.DetailCultureViewModel
+import com.example.ourculture.ui.detailmarketplace.DetailMarketplaceViewModel
 import com.example.ourculture.ui.home.HomeViewModel
 import com.example.ourculture.ui.insertmarketplace.InsertMarketplaceViewModel
 import com.example.ourculture.ui.login.LoginViewModel
@@ -37,6 +38,9 @@ class ViewModelFactory private constructor(private val repository: CultureReposi
             }
             modelClass.isAssignableFrom(SignUpViewModel::class.java) -> {
                 SignUpViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(DetailMarketplaceViewModel::class.java) -> {
+                DetailMarketplaceViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

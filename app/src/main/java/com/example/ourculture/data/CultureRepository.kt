@@ -18,6 +18,7 @@ import com.example.ourculture.data.remote.retrofit.response.StoryResponse
 import com.example.ourculture.database.CultureDatabase
 import com.example.ourculture.data.remote.retrofit.ApiService
 import com.example.ourculture.data.remote.retrofit.response.BarangItem
+import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
 import com.example.ourculture.data.remote.retrofit.response.SignInGoogleResponse
 import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
 import com.google.gson.Gson
@@ -135,10 +136,10 @@ class CultureRepository private constructor(
         }
     }
 
-    fun getDetailMarketItem(token: String, idStory: String): LiveData<Result<DetailStoryResponse>> = liveData {
+    fun getDetailMarketItem(idStory: String): LiveData<Result<DetailBarangResponse>> = liveData {
         emit(Result.Loading)
         try {
-            val response = apiService.getDetailStories("Bearer $token", idStory)
+            val response = apiService.getDetailMarketItem(idStory)
             emit(Result.Success(response))
         } catch (e: HttpException){
             val jsonInString = e.response()?.errorBody()?.string()
