@@ -2,27 +2,27 @@ package com.example.ourculture.ui.marketplace
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.ourculture.data.remote.retrofit.response.ListStoryItem
+import com.example.ourculture.data.remote.retrofit.response.BarangItem
 import com.example.ourculture.databinding.ItemMarketplaceBinding
 import com.example.ourculture.ui.detail.DetailCultureActivity
 import com.example.ourculture.ui.detailmarketplace.DetailMarketplaceActivity
 
-class MarketplaceAdapter: PagingDataAdapter<ListStoryItem, MarketplaceAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class MarketplaceAdapter: ListAdapter<BarangItem, MarketplaceAdapter.MyViewHolder>(DIFF_CALLBACK) {
     class MyViewHolder(val binding: ItemMarketplaceBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(storyItem: ListStoryItem){
+        fun bind(barangItem: BarangItem){
             Glide.with(binding.root.context)
-                .load(storyItem.photoUrl)
+                .load(barangItem.images[0])
                 .into(binding.imgPoster)
-            binding.tvTitle.text = storyItem.name
-            binding.tvPrice.text = "Rp10.000"
-            //binding.tvLocation.text = "Kota Bali"
+            binding.tvTitle.text = barangItem.title
+            binding.tvPrice.text = "Rp.${barangItem.harga.toString()}"
+            binding.tvLocation.text = barangItem.location
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, DetailMarketplaceActivity::class.java)
-                //intent.putExtra(DetailMarketplaceActivity.EXTRA_ID, storyItem.id)
+                intent.putExtra(DetailMarketplaceActivity.EXTRA_ID, barangItem.id)
                 itemView.context.startActivity(intent)
             }
         }
@@ -41,18 +41,18 @@ class MarketplaceAdapter: PagingDataAdapter<ListStoryItem, MarketplaceAdapter.My
     }
 
     companion object{
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<ListStoryItem> =
-            object : DiffUtil.ItemCallback<ListStoryItem>() {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<BarangItem> =
+            object : DiffUtil.ItemCallback<BarangItem>() {
                 override fun areItemsTheSame(
-                    oldItem: ListStoryItem,
-                    newItem: ListStoryItem
+                    oldItem: BarangItem,
+                    newItem: BarangItem
                 ): Boolean {
                     return oldItem == newItem
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: ListStoryItem,
-                    newItem: ListStoryItem
+                    oldItem: BarangItem,
+                    newItem: BarangItem
                 ): Boolean {
                     return oldItem == newItem
                 }

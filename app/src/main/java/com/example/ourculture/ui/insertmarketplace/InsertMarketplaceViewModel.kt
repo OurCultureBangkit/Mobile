@@ -11,6 +11,8 @@ import okhttp3.RequestBody
 class InsertMarketplaceViewModel(private val cultureRepository: CultureRepository): ViewModel() {
     fun uploadImage(token: String, file: MultipartBody.Part, description: RequestBody) = cultureRepository.uploadImage(token, file, description)
 
+    fun uploadToMarket(token: String, file: MultipartBody.Part, harga: RequestBody,title: RequestBody,description: RequestBody,location: RequestBody,stock: RequestBody) = cultureRepository.uploadToMarket(token, file, harga, title, description, location, stock)
+
     fun getSession(): LiveData<UserModel> {
         return cultureRepository.getSession().asLiveData()
     }

@@ -1,5 +1,6 @@
 package com.example.ourculture.data.remote.retrofit
 
+import com.example.ourculture.data.remote.retrofit.response.BarangResponse
 import com.example.ourculture.data.remote.retrofit.response.DetailStoryResponse
 import com.example.ourculture.data.remote.retrofit.response.FileUploadResponse
 import com.example.ourculture.data.remote.retrofit.response.ListStoryItem
@@ -8,6 +9,7 @@ import com.example.ourculture.data.remote.retrofit.response.RegisterResponse
 import com.example.ourculture.data.remote.retrofit.response.SignInGoogleResponse
 import com.example.ourculture.data.remote.retrofit.response.Story
 import com.example.ourculture.data.remote.retrofit.response.StoryResponse
+import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -54,6 +56,8 @@ interface ApiService {
         @Query("page") page: Int = 1,
         @Query("size") size: Int = 5
     ): StoryResponse
+    @GET("market/barang")
+    suspend fun getAllMarket(): BarangResponse
 
     @GET("stories")
     suspend fun getStoriesWithLocation(
@@ -67,6 +71,11 @@ interface ApiService {
         @Path("id") id: String
     ): DetailStoryResponse
 
+    @GET("market/barang/detail/{id}")
+    suspend fun getDetailMarketItem(
+        @Path("id") id: String
+    ): DetailStoryResponse
+
     @Multipart
     @POST("stories")
     suspend fun uploadImage(
@@ -74,4 +83,18 @@ interface ApiService {
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
     ): FileUploadResponse
+
+    @Multipart
+    @POST("market/barang")
+    suspend fun uploadToMarket(
+        @Header("Authorization") token : String,
+        @Part file: MultipartBody.Part,
+        @Part("harga") harga: RequestBody,
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("location") location: RequestBody,
+        @Part("stock") stock: RequestBody,
+    ): UploadMarketResponse
+
+
 }

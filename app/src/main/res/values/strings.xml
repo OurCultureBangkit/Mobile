@@ -42,5 +42,7 @@
     <string name="already_have_an_account">Already Have an Account?</string>
     <string name="change_picture">Change Picture</string>
     <string name="update">Update</string>
+    <string name="location">Location</string>
+    <string name="stock">Stock</string>
 
 </resources>

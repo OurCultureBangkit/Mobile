@@ -46,9 +46,9 @@ class LoginActivity : AppCompatActivity() {
         mGoogleSignInClient.signOut()
 
         binding?.btnLogin?.setOnClickListener {
-            val username = binding?.etUsername?.text.toString()
+            val email = binding?.etUsername?.text.toString()
             val pwd = binding?.etPwd?.text.toString()
-            viewModel.postUserLogin(username, pwd).observe(this) { result ->
+            viewModel.postUserLogin(email, pwd).observe(this) { result ->
                 if (result != null){
                     when (result){
                         is Result.Loading -> {
@@ -56,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                         is Result.Success -> {
                             binding?.progressBar?.visibility = View.GONE
-                            viewModel.saveSession(UserModel(username, result.data.profile.username))
+                            viewModel.saveSession(UserModel(email, result.data.accessToken))
                             Log.d("LoginActivity", "ini token nya ${result.data.accessToken} ========")
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)

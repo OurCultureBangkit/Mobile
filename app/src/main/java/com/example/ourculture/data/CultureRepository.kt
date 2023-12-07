@@ -17,7 +17,9 @@ import com.example.ourculture.data.remote.retrofit.response.RegisterResponse
 import com.example.ourculture.data.remote.retrofit.response.StoryResponse
 import com.example.ourculture.database.CultureDatabase
 import com.example.ourculture.data.remote.retrofit.ApiService
+import com.example.ourculture.data.remote.retrofit.response.BarangItem
 import com.example.ourculture.data.remote.retrofit.response.SignInGoogleResponse
+import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaType
@@ -94,6 +96,19 @@ class CultureRepository private constructor(
         ).liveData
     }
 
+    fun getAllMarket(): LiveData<Result<List<BarangItem>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getAllMarket()
+            emit(Result.Success(response.barang))
+        } catch (e: HttpException){
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+    }
+
     fun getAllStoriesWithLocation(token: String): LiveData<Result<StoryResponse>> = liveData {
         emit(Result.Loading)
         try {
@@ -120,12 +135,38 @@ class CultureRepository private constructor(
         }
     }
 
+    fun getDetailMarketItem(token: String, idStory: String): LiveData<Result<DetailStoryResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getDetailStories("Bearer $token", idStory)
+            emit(Result.Success(response))
+        } catch (e: HttpException){
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+    }
+
     fun uploadImage(token: String, file: MultipartBody.Part, description: RequestBody): LiveData<Result<FileUploadResponse>> = liveData {
         emit(Result.Loading)
         try {
             val response = apiService.uploadImage("Bearer $token", file, description)
             emit(Result.Success(response))
         } catch (e: HttpException){
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+    }
+
+    fun uploadToMarket(token: String, file: MultipartBody.Part, harga: RequestBody,title: RequestBody,description: RequestBody,location: RequestBody,stock: RequestBody): LiveData<Result<UploadMarketResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.uploadToMarket(token, file, harga, title, description, location, stock)
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
             val jsonInString = e.response()?.errorBody()?.string()
             val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
             val errorMessage = errorBody.message

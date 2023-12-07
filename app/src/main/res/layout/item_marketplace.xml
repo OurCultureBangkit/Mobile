@@ -40,7 +40,8 @@
             android:maxLines="1"
             android:ellipsize="end"
             android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"/>
+            android:layout_marginEnd="2dp"
+            android:textColor="@color/my_light_primary"/>
 
         <TextView
             android:id="@+id/tv_price"
@@ -54,6 +55,19 @@
             android:textColor="@color/black"
             android:maxLines="1"
             android:ellipsize="end"/>
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Solok"
+            app:layout_constraintTop_toBottomOf="@+id/tv_price"
+            app:layout_constraintEnd_toEndOf="@+id/tv_title"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:drawableStartCompat="@drawable/baseline_location_on_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

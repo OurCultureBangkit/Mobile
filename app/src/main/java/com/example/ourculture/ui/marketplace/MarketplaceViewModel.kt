@@ -17,4 +17,6 @@ class MarketplaceViewModel(private val cultureRepository: CultureRepository) : V
 
     fun getAllCulture(token: String): LiveData<PagingData<ListStoryItem>> = cultureRepository.getAllStories(token).cachedIn(viewModelScope)
 
+    fun getAllMarket() = cultureRepository.getAllMarket()
+
 }

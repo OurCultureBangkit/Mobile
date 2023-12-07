@@ -47,23 +47,42 @@ class InsertMarketplaceActivity : AppCompatActivity() {
         binding.cameraButton.setOnClickListener {
             startCamera()
         }
+
+        binding.toolbarInsertMarketplace.title = "Insert Barang"
+        setSupportActionBar(binding.toolbarInsertMarketplace)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 
     private fun uploadImage() {
         currentImageUri?.let { uri ->
+            binding.progressBar.visibility = View.VISIBLE
             val imageFile = uriToFile(uri, this).reduceFileImage()
             Log.d("Image File", "showImage: ${imageFile.path}")
+            val harga = binding.etPrice.text.toString()
+            val title = binding.etName.text.toString()
             val description = binding.etDesc.text.toString()
-            binding.progressBar.visibility = View.VISIBLE
-            val requestBody = description.toRequestBody("text/plain".toMediaType())
+            val location = binding.etLocation.text.toString()
+            val stock = binding.etStock.text.toString()
+            val rbHarga = harga.toRequestBody("text/plain".toMediaType())
+            val rbTitle = title.toRequestBody("text/plain".toMediaType())
+            val rbDescription = description.toRequestBody("text/plain".toMediaType())
+            val rbLocation = location.toRequestBody("text/plain".toMediaType())
+            val rbStock = stock.toRequestBody("text/plain".toMediaType())
             val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
             val multipartBody = MultipartBody.Part.createFormData(
-                "photo",
+                "image",
                 imageFile.name,
                 requestImageFile
             )
             viewModel.getSession().observe(this) { user ->
-                viewModel.uploadImage(user.token, multipartBody, requestBody).observe(this) { result ->
+                viewModel.uploadToMarket(user.token, multipartBody, rbHarga, rbTitle, rbDescription, rbLocation, rbStock).observe(this) { result ->
                     if (result != null) {
                         when (result) {
                             Result.Loading -> {
