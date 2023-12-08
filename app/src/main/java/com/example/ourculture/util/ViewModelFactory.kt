@@ -12,7 +12,9 @@ import com.example.ourculture.ui.insertmarketplace.InsertMarketplaceViewModel
 import com.example.ourculture.ui.login.LoginViewModel
 import com.example.ourculture.ui.main.MainViewModel
 import com.example.ourculture.ui.marketplace.MarketplaceViewModel
+import com.example.ourculture.ui.setting.ProfileViewModel
 import com.example.ourculture.ui.signup.SignUpViewModel
+import com.example.ourculture.ui.wishlist.WishlistViewModel
 
 class ViewModelFactory private constructor(private val repository: CultureRepository): ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
@@ -41,6 +43,12 @@ class ViewModelFactory private constructor(private val repository: CultureReposi
             }
             modelClass.isAssignableFrom(DetailMarketplaceViewModel::class.java) -> {
                 DetailMarketplaceViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(WishlistViewModel::class.java) -> {
+                WishlistViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

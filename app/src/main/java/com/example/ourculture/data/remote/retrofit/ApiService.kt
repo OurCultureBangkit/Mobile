@@ -4,6 +4,7 @@ import com.example.ourculture.data.remote.retrofit.response.BarangResponse
 import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
 import com.example.ourculture.data.remote.retrofit.response.DetailStoryResponse
 import com.example.ourculture.data.remote.retrofit.response.FileUploadResponse
+import com.example.ourculture.data.remote.retrofit.response.GetWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.ListStoryItem
 import com.example.ourculture.data.remote.retrofit.response.LoginResponse
 import com.example.ourculture.data.remote.retrofit.response.PostWishlistResponse
@@ -12,6 +13,7 @@ import com.example.ourculture.data.remote.retrofit.response.SignInGoogleResponse
 import com.example.ourculture.data.remote.retrofit.response.Story
 import com.example.ourculture.data.remote.retrofit.response.StoryResponse
 import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
+import com.example.ourculture.data.remote.retrofit.response.WhoamiResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -60,12 +62,25 @@ interface ApiService {
     ): StoryResponse
     @GET("market/barang")
     suspend fun getAllMarket(): BarangResponse
+
+    @GET("market/wishlist")
+    suspend fun getUserWishlist(
+        @Header("Authorization") token : String,
+    ): GetWishlistResponse
+
+    @GET("user/whoami")
+    suspend fun getWhoami(
+        @Header("Authorization") token : String,
+    ): WhoamiResponse
+
     @FormUrlEncoded
     @POST("market/wishlist")
     suspend fun postUserWishlist(
         @Header("Authorization") token : String,
         @Field("barangId") barangId: Int?,
     ): PostWishlistResponse
+
+
 
     @GET("stories")
     suspend fun getStoriesWithLocation(

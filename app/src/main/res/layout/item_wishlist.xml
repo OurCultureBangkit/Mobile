@@ -45,7 +45,7 @@
             tools:text="@string/nama_barang" />
 
         <TextView
-            android:id="@+id/tv_item_published_date"
+            android:id="@+id/tv_wishlist_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -62,8 +62,8 @@
             android:layout_marginTop="8dp"
             android:gravity="start"
             android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/tv_item_published_date"
-            app:layout_constraintTop_toBottomOf="@+id/tv_item_published_date"
+            app:layout_constraintStart_toStartOf="@+id/tv_wishlist_price"
+            app:layout_constraintTop_toBottomOf="@+id/tv_wishlist_price"
             tools:text="Bali"
             tools:drawableStart="@drawable/baseline_location_on_18"/>
 

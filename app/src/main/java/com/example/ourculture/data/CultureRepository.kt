@@ -18,10 +18,14 @@ import com.example.ourculture.data.remote.retrofit.response.StoryResponse
 import com.example.ourculture.database.CultureDatabase
 import com.example.ourculture.data.remote.retrofit.ApiService
 import com.example.ourculture.data.remote.retrofit.response.BarangItem
+import com.example.ourculture.data.remote.retrofit.response.BarangItemWishList
 import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
+import com.example.ourculture.data.remote.retrofit.response.GetWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.PostWishlistResponse
+import com.example.ourculture.data.remote.retrofit.response.ProfileWhoami
 import com.example.ourculture.data.remote.retrofit.response.SignInGoogleResponse
 import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
+import com.example.ourculture.data.remote.retrofit.response.WhoamiResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaType
@@ -111,6 +115,33 @@ class CultureRepository private constructor(
         }
     }
 
+    fun getUserWishlist(token: String): LiveData<Result<List<BarangItemWishList>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getUserWishlist(token)
+            emit(Result.Success(response.barang))
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+    }
+
+    fun getWhoami(token: String): LiveData<Result<ProfileWhoami>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getWhoami(token)
+            emit(Result.Success(response.profile))
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+    }
+
+
     fun getAllStoriesWithLocation(token: String): LiveData<Result<StoryResponse>> = liveData {
         emit(Result.Loading)
         try {
@@ -188,6 +219,7 @@ class CultureRepository private constructor(
             emit(Result.Error(errorMessage.toString()))
         }
     }
+
 
     companion object {
         @Volatile

@@ -2,31 +2,31 @@ package com.example.ourculture.data.remote.retrofit.response
 
 import com.google.gson.annotations.SerializedName
 
-data class LoginResponse(
-
-	@field:SerializedName("access_token")
-	val accessToken: String,
+data class WhoamiResponse(
 
 	@field:SerializedName("code")
 	val code: Int,
 
 	@field:SerializedName("profile")
-	val profile: ProfileLogin,
+	val profile: ProfileWhoami,
 
-	@field:SerializedName("status")
-	val status: String
+	@field:SerializedName("message")
+	val message: String
 )
 
-data class ProfileLogin(
+data class ProfileWhoami(
 
-	@field:SerializedName("role")
-	val role: String,
+	@field:SerializedName("googleId")
+	val googleId: String,
+
+	@field:SerializedName("roles")
+	val roles: String,
 
 	@field:SerializedName("id")
 	val id: Int,
 
 	@field:SerializedName("avatar")
-	val avatar: Any?,
+	val avatar: String?,
 
 	@field:SerializedName("email")
 	val email: String,

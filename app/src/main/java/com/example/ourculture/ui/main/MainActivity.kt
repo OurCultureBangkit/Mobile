@@ -20,6 +20,7 @@ import com.example.ourculture.ui.insertmarketplace.InsertMarketplaceActivity
 import com.example.ourculture.ui.login.LoginActivity
 import com.example.ourculture.ui.marketplace.MarketplaceFragment
 import com.example.ourculture.ui.setting.ProfileActivity
+import com.example.ourculture.ui.wishlist.WishlistFragment
 import com.example.ourculture.util.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
@@ -96,6 +97,10 @@ class MainActivity : AppCompatActivity() {
                                 }
 
                             })
+                            true
+                        }
+                        R.id.navigation_wishlist -> {
+                            replaceFragment(WishlistFragment())
                             true
                         }
                         else -> false
