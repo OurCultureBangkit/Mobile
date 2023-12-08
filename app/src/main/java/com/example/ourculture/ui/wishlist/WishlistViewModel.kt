@@ -13,4 +13,5 @@ class WishlistViewModel(private val cultureRepository: CultureRepository) : View
         return cultureRepository.getSession().asLiveData()
     }
 
+    fun deleteUserWishlist(token: String, wishListId: Int) = cultureRepository.deleteUserWishlist(token, wishListId)
 }

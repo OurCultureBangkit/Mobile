@@ -17,7 +17,7 @@ data class DetailBarangResponse(
 data class Barang(
 
 	@field:SerializedName("images")
-	val images: List<String>,
+	val images: String,
 
 	@field:SerializedName("harga")
 	val harga: Int,

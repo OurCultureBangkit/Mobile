@@ -2,11 +2,11 @@ package com.example.ourculture.data.remote.retrofit.response
 
 import com.google.gson.annotations.SerializedName
 
-data class FileUploadResponse(
+data class DeleteWishlistResponse(
 
-	@field:SerializedName("error")
-	val error: Boolean? = null,
+	@field:SerializedName("code")
+	val code: Int,
 
 	@field:SerializedName("message")
-	val message: String? = null
+	val message: String
 )

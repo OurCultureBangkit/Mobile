@@ -30,12 +30,6 @@ class WishlistFragment : Fragment() {
         _binding = FragmentWishlistBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val wishListAdapter = WishListAdapter()
-        binding.rvWishlist.apply {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-        }
-
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.getUserWishlist(user.token).observe(viewLifecycleOwner) { result ->
                 if (result != null) {
@@ -46,7 +40,29 @@ class WishlistFragment : Fragment() {
                         is Result.Success -> {
                             binding.pbWishlist.visibility = View.GONE
                             val wishlistData = result.data
-                            Log.i("teslog", wishlistData.toString())
+                            val wishListAdapter = WishListAdapter{ barangItemWishList ->
+                                viewModel.deleteUserWishlist(user.token, barangItemWishList.wishListId).observe(viewLifecycleOwner) { resultDelete ->
+                                    if (resultDelete != null) {
+                                        when(resultDelete) {
+                                            Result.Loading -> {
+                                                binding.pbWishlist.visibility = View.VISIBLE
+                                            }
+                                            is Result.Success -> {
+                                                binding.pbWishlist.visibility = View.GONE
+
+                                            }
+                                            is Result.Error -> {
+                                                binding.pbWishlist.visibility = View.GONE
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            binding.rvWishlist.apply {
+                                layoutManager = LinearLayoutManager(context)
+                                setHasFixedSize(true)
+                            }
                             wishListAdapter.submitList(wishlistData)
                             binding.rvWishlist.adapter = wishListAdapter
                         }

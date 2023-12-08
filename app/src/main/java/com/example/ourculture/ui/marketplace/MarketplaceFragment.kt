@@ -10,8 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.ourculture.data.Result
 import com.example.ourculture.databinding.FragmentMarketplaceBinding
-import com.example.ourculture.ui.main.LoadingStateAdapter
-import com.example.ourculture.ui.main.MainAdapter
 import com.example.ourculture.util.ViewModelFactory
 
 class MarketplaceFragment : Fragment() {

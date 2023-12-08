@@ -2,10 +2,10 @@ package com.example.ourculture.data.remote.retrofit.response
 
 import com.google.gson.annotations.SerializedName
 
-data class GetWishlistResponse(
+data class MyBarangResponse(
 
 	@field:SerializedName("barang")
-	val barang: List<BarangItemWishList>,
+	val barang: List<MyBarangItem>,
 
 	@field:SerializedName("totalItems")
 	val totalItems: Int,
@@ -23,19 +23,28 @@ data class GetWishlistResponse(
 	val currentPage: Int
 )
 
-data class BarangItemWishList(
+data class MyPostBy(
+
+	@field:SerializedName("id")
+	val id: Int,
+
+	@field:SerializedName("username")
+	val username: String
+)
+
+data class MyBarangItem(
 
 	@field:SerializedName("barangId")
 	val barangId: Int,
 
-	@field:SerializedName("image")
-	val image: String,
-
-	@field:SerializedName("wishListId")
-	val wishListId: Int,
+	@field:SerializedName("images")
+	val images: String,
 
 	@field:SerializedName("harga")
 	val harga: Int,
+
+	@field:SerializedName("postBy")
+	val postBy: PostBy,
 
 	@field:SerializedName("description")
 	val description: String,

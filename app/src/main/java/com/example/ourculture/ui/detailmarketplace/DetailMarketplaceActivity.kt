@@ -28,7 +28,6 @@ class DetailMarketplaceActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val idItem = intent.getStringExtra(EXTRA_ID).toString()
-        Toast.makeText(this, idItem, Toast.LENGTH_SHORT).show()
 
         viewModel.getSession().observe(this) { user ->
             userToken = user.token
@@ -50,7 +49,7 @@ class DetailMarketplaceActivity : AppCompatActivity() {
                             binding.tvLocation.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_location_on_18, 0, 0, 0)
 
                             Glide.with(this)
-                                .load(result.data.barang.images[0])
+                                .load(result.data.barang.images)
                                 .into(binding.ivDetailPhoto)
                             binding.tvTitle.text = result.data.barang.title
                             binding.tvPrice.text = "Rp.${result.data.barang.harga}"

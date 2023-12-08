@@ -11,11 +11,11 @@ import com.example.ourculture.data.remote.retrofit.response.BarangItemWishList
 import com.example.ourculture.databinding.ItemWishlistBinding
 import com.example.ourculture.ui.detailmarketplace.DetailMarketplaceActivity
 
-class WishListAdapter: ListAdapter<BarangItemWishList, WishListAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class WishListAdapter(private val onTrashcanClick: (BarangItemWishList) -> Unit): ListAdapter<BarangItemWishList, WishListAdapter.MyViewHolder>(DIFF_CALLBACK) {
     class MyViewHolder(val binding: ItemWishlistBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(barangItemWishList: BarangItemWishList){
             Glide.with(binding.root.context)
-                .load(barangItemWishList.image[0])
+                .load(barangItemWishList.image)
                 .into(binding.ivImgWishlistItem)
             binding.tvItemTitle.text = barangItemWishList.title
             binding.tvWishlistPrice.text = "Rp.${barangItemWishList.harga}"
@@ -34,9 +34,12 @@ class WishListAdapter: ListAdapter<BarangItemWishList, WishListAdapter.MyViewHol
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val story = getItem(position)
-        if (story != null) {
-            holder.bind(story)
+        val wishList = getItem(position)
+        if (wishList != null) {
+            holder.bind(wishList)
+        }
+        holder.binding.ibRemoveWishlistItem.setOnClickListener {
+            onTrashcanClick(wishList)
         }
     }
 

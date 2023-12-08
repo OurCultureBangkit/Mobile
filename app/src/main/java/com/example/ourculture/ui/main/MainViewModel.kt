@@ -8,7 +8,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.ourculture.data.CultureRepository
 import com.example.ourculture.data.pref.UserModel
-import com.example.ourculture.data.remote.retrofit.response.ListStoryItem
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val cultureRepository: CultureRepository): ViewModel() {

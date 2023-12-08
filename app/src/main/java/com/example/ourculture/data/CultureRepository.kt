@@ -2,45 +2,57 @@ package com.example.ourculture.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.liveData
 import com.example.ourculture.data.pref.UserModel
 import com.example.ourculture.data.pref.UserPreference
-import com.example.ourculture.data.remote.retrofit.response.DetailStoryResponse
 import com.example.ourculture.data.remote.retrofit.response.ErrorResponse
-import com.example.ourculture.data.remote.retrofit.response.FileUploadResponse
-import com.example.ourculture.data.remote.retrofit.response.ListStoryItem
 import com.example.ourculture.data.remote.retrofit.response.LoginResponse
 import com.example.ourculture.data.remote.retrofit.response.RegisterResponse
-import com.example.ourculture.data.remote.retrofit.response.StoryResponse
-import com.example.ourculture.database.CultureDatabase
 import com.example.ourculture.data.remote.retrofit.ApiService
 import com.example.ourculture.data.remote.retrofit.response.BarangItem
 import com.example.ourculture.data.remote.retrofit.response.BarangItemWishList
+import com.example.ourculture.data.remote.retrofit.response.DeleteWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
-import com.example.ourculture.data.remote.retrofit.response.GetWishlistResponse
+import com.example.ourculture.data.remote.retrofit.response.MyBarangItem
 import com.example.ourculture.data.remote.retrofit.response.PostWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.ProfileWhoami
 import com.example.ourculture.data.remote.retrofit.response.SignInGoogleResponse
 import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
-import com.example.ourculture.data.remote.retrofit.response.WhoamiResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
-import java.io.File
 
 class CultureRepository private constructor(
     private val userPreference: UserPreference,
     private val apiService: ApiService,
-    private val cultureDatabase: CultureDatabase
 ){
+    fun getMyBarang(token: String): LiveData<Result<List<MyBarangItem>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getMyBarang(token)
+            emit(Result.Success(response.barang))
+        } catch (e: HttpException){
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+    }
+
+    fun getAllMarket(): LiveData<Result<List<BarangItem>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getAllMarket()
+            emit(Result.Success(response.barang))
+        } catch (e: HttpException){
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+    }
+
     fun postUserLogin(email: String, password: String): LiveData<Result<LoginResponse>> = liveData {
         emit(Result.Loading)
         try{
@@ -77,44 +89,6 @@ class CultureRepository private constructor(
         }
     }
 
-
-    suspend fun saveSession(user: UserModel) {
-        userPreference.saveSession(user)
-    }
-
-    fun getSession(): Flow<UserModel> {
-        return userPreference.getSession()
-    }
-
-    suspend fun logout(){
-        userPreference.logout()
-    }
-
-
-    fun getAllStories(token: String): LiveData<PagingData<ListStoryItem>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 5
-            ),
-            pagingSourceFactory = {
-                CulturePagingSource(apiService, token)
-            }
-        ).liveData
-    }
-
-    fun getAllMarket(): LiveData<Result<List<BarangItem>>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.getAllMarket()
-            emit(Result.Success(response.barang))
-        } catch (e: HttpException){
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-            val errorMessage = errorBody.message
-            emit(Result.Error(errorMessage.toString()))
-        }
-    }
-
     fun getUserWishlist(token: String): LiveData<Result<List<BarangItemWishList>>> = liveData {
         emit(Result.Loading)
         try {
@@ -141,26 +115,12 @@ class CultureRepository private constructor(
         }
     }
 
-
-    fun getAllStoriesWithLocation(token: String): LiveData<Result<StoryResponse>> = liveData {
+    fun deleteUserWishlist(token: String, wishListId: Int): LiveData<Result<DeleteWishlistResponse>> = liveData {
         emit(Result.Loading)
         try {
-            val response = apiService.getStoriesWithLocation("Bearer $token")
+            val response = apiService.deleteUserWishlist(token, wishListId)
             emit(Result.Success(response))
-        } catch (e: HttpException){
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-            val errorMessage = errorBody.message
-            emit(Result.Error(errorMessage.toString()))
-        }
-    }
-
-    fun getDetailStories(token: String, idStory: String): LiveData<Result<DetailStoryResponse>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.getDetailStories("Bearer $token", idStory)
-            emit(Result.Success(response))
-        } catch (e: HttpException){
+        } catch (e: HttpException) {
             val jsonInString = e.response()?.errorBody()?.string()
             val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
             val errorMessage = errorBody.message
@@ -172,19 +132,6 @@ class CultureRepository private constructor(
         emit(Result.Loading)
         try {
             val response = apiService.getDetailMarketItem(idStory)
-            emit(Result.Success(response))
-        } catch (e: HttpException){
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-            val errorMessage = errorBody.message
-            emit(Result.Error(errorMessage.toString()))
-        }
-    }
-
-    fun uploadImage(token: String, file: MultipartBody.Part, description: RequestBody): LiveData<Result<FileUploadResponse>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.uploadImage("Bearer $token", file, description)
             emit(Result.Success(response))
         } catch (e: HttpException){
             val jsonInString = e.response()?.errorBody()?.string()
@@ -220,6 +167,18 @@ class CultureRepository private constructor(
         }
     }
 
+    suspend fun saveSession(user: UserModel) {
+        userPreference.saveSession(user)
+    }
+
+    fun getSession(): Flow<UserModel> {
+        return userPreference.getSession()
+    }
+
+    suspend fun logout(){
+        userPreference.logout()
+    }
+
 
     companion object {
         @Volatile
@@ -227,10 +186,9 @@ class CultureRepository private constructor(
         fun getInstance(
             userPreference: UserPreference,
             apiService: ApiService,
-            cultureDatabase: CultureDatabase
         ): CultureRepository =
             instance ?: synchronized(this) {
-                instance ?: CultureRepository(userPreference, apiService, cultureDatabase)
+                instance ?: CultureRepository(userPreference, apiService)
             }.also { instance = it }
     }
 }

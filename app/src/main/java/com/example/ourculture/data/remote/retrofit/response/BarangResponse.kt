@@ -26,13 +26,13 @@ data class BarangResponse(
 data class BarangItem(
 
 	@field:SerializedName("images")
-	val images: List<String>,
+	val images: String,
 
 	@field:SerializedName("harga")
 	val harga: Int,
 
 	@field:SerializedName("postBy")
-	val postBy: barangPostBy,
+	val postBy: PostBy,
 
 	@field:SerializedName("description")
 	val description: String,

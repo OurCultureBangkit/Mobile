@@ -13,4 +13,5 @@ class ProfileViewModel(private val cultureRepository: CultureRepository): ViewMo
         return cultureRepository.getSession().asLiveData()
     }
 
+    fun getMyBarang(token: String) = cultureRepository.getMyBarang(token)
 }

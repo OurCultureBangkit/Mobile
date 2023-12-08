@@ -34,35 +34,6 @@ class DetailCultureActivity : AppCompatActivity() {
 
         viewModel.getSession().observe(this) { user ->
 
-            viewModel.getDetailStories(user.token ,idUser.toString()).observe(this) { result ->
-                if (result != null) {
-                    when (result) {
-                        is Result.Loading -> {
-                            binding?.progressBar?.visibility = View.VISIBLE
-                        }
-                        is Result.Success -> {
-                            binding?.progressBar?.visibility = View.GONE
-                            binding?.root?.let {
-                                binding?.ivDetailPhoto?.let { it1 ->
-                                    Glide.with(it.context)
-                                        .load(result.data.story?.photoUrl)
-                                        .into(it1)
-                                }
-                            }
-                            binding?.tvTitle?.text = result.data.story?.name.toString()
-                            binding?.tvDescription?.text = result.data.story?.description.toString()
-                        }
-                        is Result.Error -> {
-                            binding?.progressBar?.visibility = View.GONE
-                            Toast.makeText(
-                                this,
-                                "Terjadi kesalahan" + result.error,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
-            }
         }
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
