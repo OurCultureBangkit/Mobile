@@ -3,6 +3,7 @@ package com.example.ourculture.data.remote.retrofit
 import com.example.ourculture.data.remote.retrofit.response.BarangResponse
 import com.example.ourculture.data.remote.retrofit.response.DeleteWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
+import com.example.ourculture.data.remote.retrofit.response.GetBarangCommentResponse
 import com.example.ourculture.data.remote.retrofit.response.GetWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.LoginResponse
 import com.example.ourculture.data.remote.retrofit.response.MyBarangResponse
@@ -100,5 +101,11 @@ interface ApiService {
     suspend fun getMyBarang(
         @Header("Authorization") token : String
     ): MyBarangResponse
+
+    @GET("market/barang/{id}/comment")
+    suspend fun getCommentMarketItem(
+        @Header("Authorization") token : String,
+        @Path("id") id: String
+    ): GetBarangCommentResponse
 
 }

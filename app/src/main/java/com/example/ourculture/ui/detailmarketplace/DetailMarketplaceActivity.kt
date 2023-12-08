@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.ourculture.R
 import com.example.ourculture.data.Result
 import com.example.ourculture.databinding.ActivityDetailMarketplaceBinding
+import com.example.ourculture.ui.setting.ProfileAdapter
 import com.example.ourculture.util.ViewModelFactory
 
 class DetailMarketplaceActivity : AppCompatActivity() {
@@ -66,6 +69,31 @@ class DetailMarketplaceActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+                    }
+                }
+            }
+
+            viewModel.getCommentMarketItem(user.token, idItem).observe(this) { result ->
+                if (result != null) {
+                    when (result) {
+                        Result.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                        }
+                        is Result.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            val commentAdapter = CommentAdapter()
+                            binding.rvItemComment.apply {
+                                layoutManager = LinearLayoutManager(context)
+                                setHasFixedSize(true)
+                            }
+                            commentAdapter.submitList(result.data)
+                            binding.rvItemComment.adapter = commentAdapter
+                        }
+                        is Result.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                        }
+
                     }
                 }
             }

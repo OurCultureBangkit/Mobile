@@ -10,6 +10,7 @@ import com.example.ourculture.data.remote.retrofit.response.RegisterResponse
 import com.example.ourculture.data.remote.retrofit.ApiService
 import com.example.ourculture.data.remote.retrofit.response.BarangItem
 import com.example.ourculture.data.remote.retrofit.response.BarangItemWishList
+import com.example.ourculture.data.remote.retrofit.response.CommmentsItem
 import com.example.ourculture.data.remote.retrofit.response.DeleteWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
 import com.example.ourculture.data.remote.retrofit.response.MyBarangItem
@@ -27,6 +28,19 @@ class CultureRepository private constructor(
     private val userPreference: UserPreference,
     private val apiService: ApiService,
 ){
+    fun getCommentMarketItem(token: String, id: String): LiveData<Result<List<CommmentsItem>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getCommentMarketItem(token, id)
+            emit(Result.Success(response.commments))
+        } catch (e: HttpException){
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+    }
+
     fun getMyBarang(token: String): LiveData<Result<List<MyBarangItem>>> = liveData {
         emit(Result.Loading)
         try {

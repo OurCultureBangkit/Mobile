@@ -20,13 +20,22 @@ data class GetBarangCommentResponse(
 	val currentPage: Int
 )
 
+data class CommentPostBy(
+
+	@field:SerializedName("avatar")
+	val avatar: String?,
+
+	@field:SerializedName("username")
+	val username: String
+)
+
 data class RepliesItem(
 
 	@field:SerializedName("createdAt")
 	val createdAt: String,
 
 	@field:SerializedName("images")
-	val images: String,
+	val images: String?,
 
 	@field:SerializedName("postBy")
 	val postBy: CommentPostBy,
@@ -41,22 +50,13 @@ data class RepliesItem(
 	val id: Int
 )
 
-data class CommentPostBy(
-
-	@field:SerializedName("avatar")
-	val avatar: String,
-
-	@field:SerializedName("username")
-	val username: String
-)
-
 data class CommmentsItem(
 
 	@field:SerializedName("createdAt")
 	val createdAt: String,
 
 	@field:SerializedName("images")
-	val images: String,
+	val images: String?,
 
 	@field:SerializedName("replies")
 	val replies: List<RepliesItem>,

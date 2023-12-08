@@ -15,4 +15,5 @@ class DetailMarketplaceViewModel(private val cultureRepository: CultureRepositor
         return cultureRepository.getSession().asLiveData()
     }
 
+    fun getCommentMarketItem(token: String, id: String) = cultureRepository.getCommentMarketItem(token, id)
 }
