@@ -90,7 +90,7 @@ class InsertMarketplaceActivity : AppCompatActivity() {
                             }
                             is Result.Success -> {
                                 binding.progressBar.visibility = View.GONE
-                                Toast.makeText(this, result.data.message.toString(), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, result.data.message, Toast.LENGTH_SHORT).show()
                                 finish()
                             }
                             is Result.Error -> {

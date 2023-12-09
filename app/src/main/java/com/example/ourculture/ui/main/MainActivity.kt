@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.example.ourculture.R
 import com.example.ourculture.databinding.ActivityMainBinding
 import com.example.ourculture.ui.detection.DetectionActivity
+import com.example.ourculture.ui.detection.DetectionFragment
 import com.example.ourculture.ui.home.HomeFragment
 import com.example.ourculture.ui.insertmarketplace.InsertMarketplaceActivity
 import com.example.ourculture.ui.login.LoginActivity
@@ -84,7 +85,9 @@ class MainActivity : AppCompatActivity() {
                             true
                         }
                         R.id.navigation_camera -> {
-                            startActivity(Intent(this, DetectionActivity::class.java))
+                            replaceFragment(DetectionFragment())
+
+//                            startActivity(Intent(this, DetectionActivity::class.java))
                             true
                         }
                         R.id.navigation_marketplace -> {

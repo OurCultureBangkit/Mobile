@@ -1,12 +1,16 @@
 package com.example.ourculture.ui.camera
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.ImageCapture
@@ -14,9 +18,18 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import com.example.ourculture.data.Result
 import com.example.ourculture.databinding.ActivityCameraBinding
 import com.example.ourculture.ui.detection.DetectionActivity
+import com.example.ourculture.ui.insertmarketplace.InsertMarketplaceViewModel
+import com.example.ourculture.util.ViewModelFactory
 import com.example.ourculture.util.createCustomTempFile
+import com.example.ourculture.util.reduceFileImage
+import com.example.ourculture.util.uriToFile
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class CameraActivity : AppCompatActivity() {
     private var _binding: ActivityCameraBinding? = null
@@ -24,6 +37,10 @@ class CameraActivity : AppCompatActivity() {
 
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var imageCapture: ImageCapture? = null
+
+    private val viewModel by viewModels<InsertMarketplaceViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +57,72 @@ class CameraActivity : AppCompatActivity() {
 
         binding.captureImage.setOnClickListener {
             takePhoto()
+        }
+
+        binding.ivGalerry.setOnClickListener {
+            startGallery()
+
+        }
+
+    }
+
+    private val launcherGallery = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            detectImage(uri)
+        } else {
+            Log.d("Photo Picker", "No media selected")
+        }
+    }
+
+
+    private fun startGallery() {
+        launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+
+    private fun detectImage(uri: Uri) {
+        val imageFile = uriToFile(uri, this).reduceFileImage()
+        val harga = "10000"
+        val title = "TesUpload"
+        val description = "Description Tes Upload"
+        val location = "Location Tes Upload"
+        val stock = "100"
+        val rbHarga = harga.toRequestBody("text/plain".toMediaType())
+        val rbTitle = title.toRequestBody("text/plain".toMediaType())
+        val rbDescription = description.toRequestBody("text/plain".toMediaType())
+        val rbLocation = location.toRequestBody("text/plain".toMediaType())
+        val rbStock = stock.toRequestBody("text/plain".toMediaType())
+        val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+        val multipartBody = MultipartBody.Part.createFormData(
+            "image",
+            imageFile.name,
+            requestImageFile
+        )
+        viewModel.getSession().observe(this) { user ->
+            viewModel.uploadToMarket(user.token, multipartBody, rbHarga, rbTitle, rbDescription, rbLocation, rbStock).observe(this) { result ->
+                if (result != null) {
+                    when (result) {
+                        Result.Loading -> {
+                            binding.pbCamera.visibility = View.VISIBLE
+                        }
+                        is Result.Success -> {
+                            binding.pbCamera.visibility = View.GONE
+                            Toast.makeText(this, result.data.message, Toast.LENGTH_SHORT).show()
+                            val intent = Intent()
+                            intent.putExtra(EXTRA_CAMERAX_IMAGE, uri.toString())
+                            setResult(CAMERAX_RESULT, intent)
+                            finish()
+                        }
+                        is Result.Error -> {
+                            binding.pbCamera.visibility = View.GONE
+
+                        }
+
+                    }
+                }
+            }
         }
 
     }
@@ -86,10 +169,12 @@ class CameraActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val intent = Intent()
-                    intent.putExtra(EXTRA_CAMERAX_IMAGE, output.savedUri.toString())
-                    setResult(CAMERAX_RESULT, intent)
-                    finish()
+                    detectImage(output.savedUri!!)
+
+//                    val intent = Intent()
+//                    intent.putExtra(EXTRA_CAMERAX_IMAGE, output.savedUri.toString())
+//                    setResult(CAMERAX_RESULT, intent)
+//                    finish()
                 }
                 override fun onError(exc: ImageCaptureException) {
                     Toast.makeText(
