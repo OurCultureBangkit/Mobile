@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.ourculture.R
 import com.example.ourculture.databinding.ActivityMainBinding
 import com.example.ourculture.ui.detection.DetectionActivity
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         viewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {

@@ -83,4 +83,7 @@ dependencies {
     implementation("androidx.camera:camera-view:1.2.3")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.google.android.gms:play-services-auth:19.2.0")
+
+    implementation("androidx.room:room-ktx:2.4.2")
+
 }

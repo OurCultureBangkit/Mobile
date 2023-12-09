@@ -3,11 +3,13 @@ package com.example.ourculture.ui.detailmarketplace
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.ourculture.R
 import com.example.ourculture.data.remote.retrofit.response.CommmentsItem
 import com.example.ourculture.databinding.ItemCommentBinding
 
@@ -18,19 +20,24 @@ class CommentAdapter: ListAdapter<CommmentsItem, CommentAdapter.MyViewHolder>(DI
                 Glide.with(binding.root.context)
                     .load(commentItem.postBy.avatar)
                     .into(binding.profileImageComment)
+            } else {
+                binding.profileImageComment.setImageResource(R.drawable.baseline_account_circle_24)
             }
             binding.tvUserNameComment.text = commentItem.postBy.username
             binding.tvComment.text = commentItem.comment
 
-            Log.d("ini link photo", commentItem.images.toString())
-            Log.d("ini link photo replies", commentItem.replies[0].images.toString() )
-            if (commentItem.replies[0].postBy.avatar != null) {
-                Glide.with(binding.root.context)
-                    .load(commentItem.replies[0].postBy.avatar)
-                    .into(binding.profileImageReply)
+            if (commentItem.replies.isNotEmpty()) {
+                binding.cvReplyComment.visibility = View.VISIBLE
+                if (commentItem.replies[0].postBy.avatar != null) {
+                    Glide.with(binding.root.context)
+                        .load(commentItem.replies[0].postBy.avatar)
+                        .into(binding.profileImageReply)
+                } else {
+                    binding.profileImageReply.setImageResource(R.drawable.baseline_account_circle_24)
+                }
+                binding.tvUserNameCommentReply.text = commentItem.replies[0].postBy.username
+                binding.tvCommentReply.text = commentItem.replies[0].comment
             }
-            binding.tvUserNameCommentReply.text = commentItem.replies[0].postBy.username
-            binding.tvCommentReply.text = commentItem.replies[0].comment
 
 //            itemView.setOnClickListener {
 //                val intent = Intent(itemView.context, DetailMarketplaceActivity::class.java)

@@ -16,7 +16,7 @@
             android:id="@+id/profile_image_comment"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@drawable/baseline_account_circle_24"
+            tools:src="@drawable/baseline_account_circle_24"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@+id/profile_image_comment"
             app:layout_constraintTop_toTopOf="@+id/profile_image_comment"
-            android:text="Reyvi Rahman"
+            tools:text="Reyvi Rahman"
             android:textStyle="bold"
             android:textColor="@color/black"/>
 
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/tv_user_name_comment"
             app:layout_constraintStart_toEndOf="@+id/profile_image_comment"
-            android:text="@string/lorem"
+            tools:text="@string/lorem"
             app:layout_constraintEnd_toEndOf="parent"/>
         
         <androidx.cardview.widget.CardView
@@ -48,7 +48,9 @@
             app:layout_constraintEnd_toEndOf="@+id/tv_comment"
             android:orientation="vertical"
             android:layout_marginTop="7dp"
-            app:cardElevation="12dp">
+            app:cardElevation="12dp"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -58,7 +60,7 @@
                     android:id="@+id/profile_image_reply"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:src="@drawable/baseline_account_circle_24"
+                    tools:src="@drawable/baseline_account_circle_24"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
@@ -68,7 +70,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toEndOf="@+id/profile_image_reply"
                     app:layout_constraintTop_toTopOf="@+id/profile_image_reply"
-                    android:text="Reyvi Rahman"
+                    tools:text="Reyvi Rahman"
                     android:textColor="@color/my_light_primary"
                     android:textStyle="bold"/>
 
@@ -78,7 +80,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/tv_user_name_comment_reply"
                     app:layout_constraintStart_toEndOf="@+id/profile_image_reply"
-                    android:text="@string/lorem"
+                    tools:text="@string/lorem"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

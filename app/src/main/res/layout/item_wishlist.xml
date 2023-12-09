@@ -69,8 +69,8 @@
 
         <ImageButton
             android:id="@+id/ib_remove_wishlist_item"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
             android:src="@drawable/baseline_delete_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

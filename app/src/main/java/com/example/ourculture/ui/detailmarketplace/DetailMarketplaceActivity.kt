@@ -91,7 +91,6 @@ class DetailMarketplaceActivity : AppCompatActivity() {
                         }
                         is Result.Error -> {
                             binding.progressBar.visibility = View.GONE
-                            Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
                         }
 
                     }

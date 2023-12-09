@@ -2,6 +2,7 @@ package com.example.ourculture.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.lifecycle.map
 import com.example.ourculture.data.pref.UserModel
 import com.example.ourculture.data.pref.UserPreference
 import com.example.ourculture.data.remote.retrofit.response.ErrorResponse
@@ -18,6 +19,8 @@ import com.example.ourculture.data.remote.retrofit.response.PostWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.ProfileWhoami
 import com.example.ourculture.data.remote.retrofit.response.SignInGoogleResponse
 import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
+import com.example.ourculture.database.WishlistDao
+import com.example.ourculture.database.WishlistEntity
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
@@ -27,6 +30,7 @@ import retrofit2.HttpException
 class CultureRepository private constructor(
     private val userPreference: UserPreference,
     private val apiService: ApiService,
+    private val wishlistDao: WishlistDao
 ){
     fun getCommentMarketItem(token: String, id: String): LiveData<Result<List<CommmentsItem>>> = liveData {
         emit(Result.Loading)
@@ -116,6 +120,36 @@ class CultureRepository private constructor(
         }
     }
 
+    suspend fun deleteWishItem(wishItem: WishlistEntity) {
+        wishlistDao.delete(wishItem)
+    }
+    fun getWishlist(token: String): LiveData<Result<List<WishlistEntity>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getUserWishlist(token)
+            val barangs = response.barang
+            val wishList = barangs.map { barang ->
+                WishlistEntity (
+                    barang.wishListId,
+                    barang.barangId,
+                    barang.title,
+                    barang.harga.toString(),
+                    barang.location,
+                    barang.image
+                )
+            }
+            wishlistDao.deleteAll()
+            wishlistDao.insertWishlist(wishList)
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+        val localData: LiveData<Result<List<WishlistEntity>>> = wishlistDao.getWishlist().map { Result.Success(it) }
+        emitSource(localData)
+    }
+
     fun getWhoami(token: String): LiveData<Result<ProfileWhoami>> = liveData {
         emit(Result.Loading)
         try {
@@ -200,9 +234,10 @@ class CultureRepository private constructor(
         fun getInstance(
             userPreference: UserPreference,
             apiService: ApiService,
+            wishlistDao: WishlistDao
         ): CultureRepository =
             instance ?: synchronized(this) {
-                instance ?: CultureRepository(userPreference, apiService)
+                instance ?: CultureRepository(userPreference, apiService, wishlistDao)
             }.also { instance = it }
     }
 }

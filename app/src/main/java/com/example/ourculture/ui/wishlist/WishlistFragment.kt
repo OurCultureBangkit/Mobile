@@ -31,48 +31,96 @@ class WishlistFragment : Fragment() {
         val root: View = binding.root
 
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
-            viewModel.getUserWishlist(user.token).observe(viewLifecycleOwner) { result ->
+            viewModel.getWishlist(user.token).observe(viewLifecycleOwner) { result ->
                 if (result != null) {
-                    when (result){
+                    when (result) {
                         Result.Loading -> {
-
+                            binding.pbWishlist.visibility = View.VISIBLE
                         }
                         is Result.Success -> {
                             binding.pbWishlist.visibility = View.GONE
-                            val wishlistData = result.data
-                            val wishListAdapter = WishListAdapter{ barangItemWishList ->
-                                viewModel.deleteUserWishlist(user.token, barangItemWishList.wishListId).observe(viewLifecycleOwner) { resultDelete ->
+                            val wishListAdapter = WishListAdapter { wishItem ->
+                                viewModel.deleteWishItem(wishItem)
+                                viewModel.deleteUserWishlist(user.token, wishItem.id).observe(viewLifecycleOwner) { resultDelete ->
                                     if (resultDelete != null) {
-                                        when(resultDelete) {
+                                        when (resultDelete) {
                                             Result.Loading -> {
                                                 binding.pbWishlist.visibility = View.VISIBLE
                                             }
                                             is Result.Success -> {
                                                 binding.pbWishlist.visibility = View.GONE
-
                                             }
                                             is Result.Error -> {
                                                 binding.pbWishlist.visibility = View.GONE
-
                                             }
+
                                         }
                                     }
                                 }
                             }
+                            val wishlistData = result.data
+                            wishListAdapter.submitList(wishlistData)
                             binding.rvWishlist.apply {
                                 layoutManager = LinearLayoutManager(context)
                                 setHasFixedSize(true)
+                                adapter = wishListAdapter
                             }
-                            wishListAdapter.submitList(wishlistData)
-                            binding.rvWishlist.adapter = wishListAdapter
                         }
                         is Result.Error -> {
                             binding.pbWishlist.visibility = View.GONE
                             binding.tvWishlistEmpty.visibility = View.VISIBLE
+
                         }
+
                     }
                 }
             }
+//            viewModel.getUserWishlist(user.token).observe(viewLifecycleOwner) { result ->
+//                if (result != null) {
+//                    when (result){
+//                        Result.Loading -> {
+//
+//                        }
+//                        is Result.Success -> {
+//                            binding.pbWishlist.visibility = View.GONE
+//                            val wishlistData = result.data
+//                            val wishListAdapter = WishListAdapter{ barangItemWishList ->
+//                                viewModel.deleteUserWishlist(user.token, barangItemWishList.wishListId).observe(viewLifecycleOwner) { resultDelete ->
+//                                    if (resultDelete != null) {
+//                                        when(resultDelete) {
+//                                            Result.Loading -> {
+//                                                binding.pbWishlist.visibility = View.VISIBLE
+//                                            }
+//                                            is Result.Success -> {
+//                                                binding.pbWishlist.visibility = View.GONE
+//
+//                                            }
+//                                            is Result.Error -> {
+//                                                binding.pbWishlist.visibility = View.GONE
+//
+//                                            }
+//
+//                                            else -> {}
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                            binding.rvWishlist.apply {
+//                                layoutManager = LinearLayoutManager(context)
+//                                setHasFixedSize(true)
+//                            }
+//                            wishListAdapter.submitList(wishlistData)
+//                            binding.rvWishlist.adapter = wishListAdapter
+//                        }
+//                        is Result.Error -> {
+//                            binding.pbWishlist.visibility = View.GONE
+//                            binding.tvWishlistEmpty.visibility = View.VISIBLE
+//                        }
+//
+//                        else -> {}
+//                    }
+//                }
+//            }
         }
 
         return root
