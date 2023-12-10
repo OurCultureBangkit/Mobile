@@ -38,7 +38,47 @@
             app:layout_constraintStart_toEndOf="@+id/profile_image_comment"
             tools:text="@string/lorem"
             app:layout_constraintEnd_toEndOf="parent"/>
-        
+
+        <TextView
+            android:id="@+id/tv_reply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_comment"
+            android:text="@string/reply"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textStyle="bold"
+            android:textColor="@color/my_light_primary"
+            android:layout_marginEnd="8dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_reply_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/profile_image_comment"
+            app:layout_constraintEnd_toStartOf="@+id/tv_reply"
+            app:layout_constraintTop_toBottomOf="@id/tv_reply"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_reply_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/reply_comment"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/ib_send_reply_comment"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/outline_send_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ti_reply_comment"
+            app:layout_constraintBottom_toBottomOf="@+id/ti_reply_comment"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_reply_comment"
             android:layout_width="0dp"

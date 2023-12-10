@@ -1,10 +1,15 @@
 package com.example.ourculture.ui.detailmarketplace
 
+import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,9 +18,23 @@ import com.example.ourculture.R
 import com.example.ourculture.data.remote.retrofit.response.CommmentsItem
 import com.example.ourculture.databinding.ItemCommentBinding
 
-class CommentAdapter: ListAdapter<CommmentsItem, CommentAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class CommentAdapter(private val context: Context): ListAdapter<CommmentsItem, CommentAdapter.MyViewHolder>(DIFF_CALLBACK) {
     class MyViewHolder(val binding: ItemCommentBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(commentItem: CommmentsItem){
+        fun bind(context: Context, commentItem: CommmentsItem){
+            binding.tvReply.setOnClickListener {
+                binding.tiReplyComment.visibility = View.VISIBLE
+                binding.ibSendReplyComment.visibility = View.VISIBLE
+                binding.etReplyComment.requestFocus()
+                val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(binding.etReplyComment, InputMethodManager.SHOW_IMPLICIT)
+            }
+
+            binding.ibSendReplyComment.setOnClickListener {
+
+                val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(it.windowToken, 0)
+            }
+
             if (commentItem.postBy.avatar != null) {
                 Glide.with(binding.root.context)
                     .load(commentItem.postBy.avatar)
@@ -27,6 +46,7 @@ class CommentAdapter: ListAdapter<CommmentsItem, CommentAdapter.MyViewHolder>(DI
             binding.tvComment.text = commentItem.comment
 
             if (commentItem.replies.isNotEmpty()) {
+                binding.tvReply.visibility = View.GONE
                 binding.cvReplyComment.visibility = View.VISIBLE
                 if (commentItem.replies[0].postBy.avatar != null) {
                     Glide.with(binding.root.context)
@@ -39,11 +59,7 @@ class CommentAdapter: ListAdapter<CommmentsItem, CommentAdapter.MyViewHolder>(DI
                 binding.tvCommentReply.text = commentItem.replies[0].comment
             }
 
-//            itemView.setOnClickListener {
-//                val intent = Intent(itemView.context, DetailMarketplaceActivity::class.java)
-//                intent.putExtra(DetailMarketplaceActivity.EXTRA_ID, barangItemWishList.barangId.toString())
-//                itemView.context.startActivity(intent)
-//            }
+
         }
     }
 
@@ -55,11 +71,8 @@ class CommentAdapter: ListAdapter<CommmentsItem, CommentAdapter.MyViewHolder>(DI
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val wishList = getItem(position)
         if (wishList != null) {
-            holder.bind(wishList)
+            holder.bind(context, wishList)
         }
-//        holder.binding.ibRemoveWishlistItem.setOnClickListener {
-//            onTrashcanClick(wishList)
-//        }
     }
 
     companion object{

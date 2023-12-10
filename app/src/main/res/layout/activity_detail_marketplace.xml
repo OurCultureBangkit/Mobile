@@ -159,7 +159,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/profile_image_detail"
-            app:layout_constraintEnd_toEndOf="@+id/btn_add_wishlist"
+            app:layout_constraintEnd_toStartOf="@+id/ib_send_comment"
             app:layout_constraintTop_toTopOf="@id/profile_image_detail"
             android:visibility="gone"
             tools:visibility="visible">
@@ -172,14 +172,26 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <ImageButton
+            android:id="@+id/ib_send_comment"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/outline_send_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ti_add_comment"
+            app:layout_constraintBottom_toBottomOf="@+id/ti_add_comment"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_itemComment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/ti_add_comment"
             app:layout_constraintStart_toStartOf="@+id/profile_image_detail"
-            app:layout_constraintEnd_toEndOf="@id/ti_add_comment"
-            tools:listitem="@layout/item_comment"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:listitem="@layout/item_comment"
+            android:layout_marginEnd="8dp"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"

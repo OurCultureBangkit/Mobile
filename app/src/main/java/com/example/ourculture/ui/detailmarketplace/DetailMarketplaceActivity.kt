@@ -1,18 +1,18 @@
 package com.example.ourculture.ui.detailmarketplace
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.ourculture.R
 import com.example.ourculture.data.Result
 import com.example.ourculture.databinding.ActivityDetailMarketplaceBinding
-import com.example.ourculture.ui.setting.ProfileAdapter
 import com.example.ourculture.util.ViewModelFactory
+
 
 class DetailMarketplaceActivity : AppCompatActivity() {
     private var _binding: ActivityDetailMarketplaceBinding? = null
@@ -49,6 +49,7 @@ class DetailMarketplaceActivity : AppCompatActivity() {
                             binding.comment.text = resources.getString(R.string.comment)
                             binding.profileImageDetail.visibility = View.VISIBLE
                             binding.tiAddComment.visibility = View.VISIBLE
+                            binding.ibSendComment.visibility = View.VISIBLE
                             binding.tvLocation.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_location_on_18, 0, 0, 0)
 
                             Glide.with(this)
@@ -81,7 +82,7 @@ class DetailMarketplaceActivity : AppCompatActivity() {
                         }
                         is Result.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            val commentAdapter = CommentAdapter()
+                            val commentAdapter = CommentAdapter(this)
                             binding.rvItemComment.apply {
                                 layoutManager = LinearLayoutManager(context)
                                 setHasFixedSize(true)

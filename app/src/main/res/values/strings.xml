@@ -45,5 +45,7 @@
     <string name="stock">Stock</string>
     <string name="post_by">Post By</string>
     <string name="your_wishlist_is_empty">Your Wishlist is Empty</string>
+    <string name="reply">Reply</string>
+    <string name="reply_comment">Reply Comment...</string>
 
 </resources>
