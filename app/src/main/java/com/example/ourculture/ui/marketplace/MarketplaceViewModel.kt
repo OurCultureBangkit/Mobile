@@ -8,12 +8,14 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.ourculture.data.CultureRepository
 import com.example.ourculture.data.pref.UserModel
+import com.example.ourculture.data.remote.retrofit.response.BarangItem
 
 class MarketplaceViewModel(private val cultureRepository: CultureRepository) : ViewModel() {
     fun getSession(): LiveData<UserModel> {
         return cultureRepository.getSession().asLiveData()
     }
 
-    fun getAllMarket() = cultureRepository.getAllMarket()
+//    fun getAllMarket() = cultureRepository.getAllMarket()
+    val barang: LiveData<PagingData<BarangItem>> = cultureRepository.getAllMarket().cachedIn(viewModelScope)
 
 }

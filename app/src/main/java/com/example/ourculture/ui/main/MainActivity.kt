@@ -19,6 +19,7 @@ import com.example.ourculture.ui.detection.DetectionActivity
 import com.example.ourculture.ui.detection.DetectionFragment
 import com.example.ourculture.ui.home.HomeFragment
 import com.example.ourculture.ui.insertmarketplace.InsertMarketplaceActivity
+import com.example.ourculture.ui.insertmarketplace.InsertMarketplaceFragment
 import com.example.ourculture.ui.login.LoginActivity
 import com.example.ourculture.ui.marketplace.MarketplaceFragment
 import com.example.ourculture.ui.setting.ProfileActivity
@@ -95,8 +96,8 @@ class MainActivity : AppCompatActivity() {
                             true
                         }
                         R.id.navigation_upload_market -> {
-                            startActivity(Intent(this, InsertMarketplaceActivity::class.java))
-                            InsertMarketplaceActivity.setOnItemClickCallback(object: InsertMarketplaceActivity.OnItemClickCallback{
+                            replaceFragment(InsertMarketplaceFragment())
+                            InsertMarketplaceFragment.setOnItemClickCallback(object: InsertMarketplaceFragment.OnItemClickCallback{
                                 override fun onItemClicked() {
                                     binding.bottomNavigation.selectedItemId = R.id.navigation_marketplace
                                 }

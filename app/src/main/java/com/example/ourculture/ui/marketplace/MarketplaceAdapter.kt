@@ -2,6 +2,7 @@ package com.example.ourculture.ui.marketplace
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +12,7 @@ import com.example.ourculture.databinding.ItemMarketplaceBinding
 import com.example.ourculture.ui.detail.DetailCultureActivity
 import com.example.ourculture.ui.detailmarketplace.DetailMarketplaceActivity
 
-class MarketplaceAdapter: ListAdapter<BarangItem, MarketplaceAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class MarketplaceAdapter: PagingDataAdapter<BarangItem, MarketplaceAdapter.MyViewHolder>(DIFF_CALLBACK) {
     class MyViewHolder(val binding: ItemMarketplaceBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(barangItem: BarangItem){
             Glide.with(binding.root.context)
@@ -41,23 +42,15 @@ class MarketplaceAdapter: ListAdapter<BarangItem, MarketplaceAdapter.MyViewHolde
     }
 
     companion object{
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<BarangItem> =
-            object : DiffUtil.ItemCallback<BarangItem>() {
-                override fun areItemsTheSame(
-                    oldItem: BarangItem,
-                    newItem: BarangItem
-                ): Boolean {
-                    return oldItem == newItem
-                }
-
-                override fun areContentsTheSame(
-                    oldItem: BarangItem,
-                    newItem: BarangItem
-                ): Boolean {
-                    return oldItem == newItem
-                }
-
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<BarangItem>() {
+            override fun areItemsTheSame(oldItem: BarangItem, newItem: BarangItem): Boolean {
+                return oldItem == newItem
             }
+
+            override fun areContentsTheSame(oldItem: BarangItem, newItem: BarangItem): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
     }
 
 }

@@ -25,6 +25,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @FormUrlEncoded
@@ -54,7 +55,10 @@ interface ApiService {
     ): SignInGoogleResponse
 
     @GET("market/barang")
-    suspend fun getAllMarket(): BarangResponse
+    suspend fun getAllMarket(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 5
+    ): BarangResponse
 
     @GET("market/wishlist")
     suspend fun getUserWishlist(
