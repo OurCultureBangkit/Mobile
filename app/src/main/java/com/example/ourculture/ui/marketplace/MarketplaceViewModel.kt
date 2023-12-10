@@ -15,7 +15,6 @@ class MarketplaceViewModel(private val cultureRepository: CultureRepository) : V
         return cultureRepository.getSession().asLiveData()
     }
 
-//    fun getAllMarket() = cultureRepository.getAllMarket()
     val barang: LiveData<PagingData<BarangItem>> = cultureRepository.getAllMarket().cachedIn(viewModelScope)
 
 }

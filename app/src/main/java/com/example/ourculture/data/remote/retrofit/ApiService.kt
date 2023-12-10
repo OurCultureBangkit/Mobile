@@ -60,6 +60,14 @@ interface ApiService {
         @Query("limit") limit: Int = 5
     ): BarangResponse
 
+    @GET("user/market/barang")
+    suspend fun getMyBarang(
+        @Header("Authorization") token : String,
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 5
+    ): MyBarangResponse
+
+
     @GET("market/wishlist")
     suspend fun getUserWishlist(
         @Header("Authorization") token : String,
@@ -100,11 +108,6 @@ interface ApiService {
         @Header("Authorization") token : String,
         @Field("wishListId") wishListId: Int,
         ): DeleteWishlistResponse
-
-    @GET("user/market/barang")
-    suspend fun getMyBarang(
-        @Header("Authorization") token : String
-    ): MyBarangResponse
 
     @GET("market/barang/{id}/comment")
     suspend fun getCommentMarketItem(

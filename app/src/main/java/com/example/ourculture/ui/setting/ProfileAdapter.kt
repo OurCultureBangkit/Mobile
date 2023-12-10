@@ -3,15 +3,17 @@ package com.example.ourculture.ui.setting
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.ourculture.data.remote.retrofit.response.BarangItem
 import com.example.ourculture.data.remote.retrofit.response.MyBarangItem
 import com.example.ourculture.databinding.ItemMarketplaceBinding
 import com.example.ourculture.ui.detailmarketplace.DetailMarketplaceActivity
 
-class ProfileAdapter: ListAdapter<MyBarangItem, ProfileAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class ProfileAdapter: PagingDataAdapter<MyBarangItem, ProfileAdapter.MyViewHolder>(DIFF_CALLBACK) {
     class MyViewHolder(val binding: ItemMarketplaceBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(barangItem: MyBarangItem){
             Glide.with(binding.root.context)
@@ -43,18 +45,12 @@ class ProfileAdapter: ListAdapter<MyBarangItem, ProfileAdapter.MyViewHolder>(DIF
     companion object{
         val DIFF_CALLBACK: DiffUtil.ItemCallback<MyBarangItem> =
             object : DiffUtil.ItemCallback<MyBarangItem>() {
-                override fun areItemsTheSame(
-                    oldItem: MyBarangItem,
-                    newItem: MyBarangItem
-                ): Boolean {
+                override fun areItemsTheSame(oldItem: MyBarangItem, newItem: MyBarangItem): Boolean {
                     return oldItem == newItem
                 }
 
-                override fun areContentsTheSame(
-                    oldItem: MyBarangItem,
-                    newItem: MyBarangItem
-                ): Boolean {
-                    return oldItem == newItem
+                override fun areContentsTheSame(oldItem: MyBarangItem, newItem: MyBarangItem): Boolean {
+                    return oldItem.barangId == newItem.barangId
                 }
 
             }

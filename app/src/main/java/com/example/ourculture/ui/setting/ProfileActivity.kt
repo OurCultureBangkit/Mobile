@@ -10,8 +10,6 @@ import com.bumptech.glide.Glide
 import com.example.ourculture.R
 import com.example.ourculture.data.Result
 import com.example.ourculture.databinding.ActivityProfileBinding
-import com.example.ourculture.ui.main.MainViewModel
-import com.example.ourculture.ui.marketplace.MarketplaceAdapter
 import com.example.ourculture.util.ViewModelFactory
 
 class ProfileActivity : AppCompatActivity() {
@@ -48,6 +46,7 @@ class ProfileActivity : AppCompatActivity() {
                                     .load(result.data.avatar)
                                     .into(binding.profileImage)
                             }
+                            binding.tvUserNameProfile.text = result.data.username
 
                         }
                         is Result.Error -> {
@@ -57,27 +56,23 @@ class ProfileActivity : AppCompatActivity() {
                     }
                 }
             }
+
             viewModel.getMyBarang(user.token).observe(this) { result ->
-                if (result != null) {
-                    when (result) {
-                        Result.Loading -> {
-
-                        }
-                        is Result.Success -> {
-                            binding.pbProfile.visibility = View.GONE
-                            profilAdapter.submitList(result.data)
-                            binding.rvItemMyBarang.adapter = profilAdapter
-                        }
-                        is Result.Error -> {
-                            binding.pbProfile.visibility = View.GONE
-                            Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
-                        }
-
-                    }
-                }
+                profilAdapter.submitData(lifecycle, result)
+                binding.rvItemMyBarang.adapter = profilAdapter
             }
         }
+
+        MyBarangPagingSource.isLoading.observe(this) {
+            showLoading(it)
+        }
+
     }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.pbProfile.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()

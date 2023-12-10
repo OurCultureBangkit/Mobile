@@ -1,5 +1,6 @@
 package com.example.ourculture.data
 
+import android.graphics.pdf.PdfDocument.Page
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
@@ -26,6 +27,7 @@ import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
 import com.example.ourculture.database.WishlistDao
 import com.example.ourculture.database.WishlistEntity
 import com.example.ourculture.ui.marketplace.MarketplacePagingSource
+import com.example.ourculture.ui.setting.MyBarangPagingSource
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
@@ -50,31 +52,18 @@ class CultureRepository private constructor(
         }
     }
 
-    fun getMyBarang(token: String): LiveData<Result<List<MyBarangItem>>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.getMyBarang(token)
-            emit(Result.Success(response.barang))
-        } catch (e: HttpException){
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-            val errorMessage = errorBody.message
-            emit(Result.Error(errorMessage.toString()))
-        }
+    fun getMyBarang(token: String): LiveData<PagingData<MyBarangItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5,
+                enablePlaceholders = false,
+                initialLoadSize = 5
+            ),
+            pagingSourceFactory = {
+                MyBarangPagingSource(apiService, token)
+            }
+        ).liveData
     }
-
-//    fun getAllMarket(): LiveData<Result<List<BarangItem>>> = liveData {
-//        emit(Result.Loading)
-//        try {
-//            val response = apiService.getAllMarket()
-//            emit(Result.Success(response.barang))
-//        } catch (e: HttpException){
-//            val jsonInString = e.response()?.errorBody()?.string()
-//            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-//            val errorMessage = errorBody.message
-//            emit(Result.Error(errorMessage.toString()))
-//        }
-//    }
 
     fun getAllMarket(): LiveData<PagingData<BarangItem>> {
         return Pager(

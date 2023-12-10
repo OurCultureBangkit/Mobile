@@ -29,31 +29,6 @@ class MarketplaceFragment : Fragment() {
         _binding = FragmentMarketplaceBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        viewModel.getAllMarket().observe(viewLifecycleOwner) { result ->
-//            if (result != null) {
-//                when (result) {
-//                    Result.Loading -> {
-//                        binding.progressMarketplace.visibility = View.VISIBLE
-//                    }
-//                    is Result.Success -> {
-//                        binding.progressMarketplace.visibility = View.GONE
-//                        val dataBarang = result.data
-//                        marketplaceAdapter.submitList(dataBarang)
-//                        binding.rvItemMarketplace.adapter = marketplaceAdapter
-//                    }
-//
-//                    is Result.Error -> {
-//                        binding.progressMarketplace.visibility = View.GONE
-//                        Toast.makeText(
-//                            context,
-//                            "Terjadi kesalahan" + result.error,
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                }
-//            }
-//        }
-
         val marketplaceAdapter = MarketplaceAdapter()
         binding.rvItemMarketplace.apply {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
