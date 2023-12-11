@@ -18,7 +18,7 @@ import com.example.ourculture.R
 import com.example.ourculture.data.remote.retrofit.response.CommmentsItem
 import com.example.ourculture.databinding.ItemCommentBinding
 
-class CommentAdapter(private val context: Context, private val onIbReplyCommentClick: (String, String) -> Unit): ListAdapter<CommmentsItem, CommentAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class CommentAdapter(private val context: Context, private val postBy:Boolean, private val onIbReplyCommentClick: (String, String) -> Unit): ListAdapter<CommmentsItem, CommentAdapter.MyViewHolder>(DIFF_CALLBACK) {
     class MyViewHolder(val binding: ItemCommentBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(context: Context, commentItem: CommmentsItem){
             binding.tvReply.setOnClickListener {
@@ -28,7 +28,6 @@ class CommentAdapter(private val context: Context, private val onIbReplyCommentC
                 val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(binding.etReplyComment, InputMethodManager.SHOW_IMPLICIT)
             }
-
 
             if (commentItem.postBy.avatar != null) {
                 Glide.with(binding.root.context)
@@ -74,6 +73,11 @@ class CommentAdapter(private val context: Context, private val onIbReplyCommentC
             imm.hideSoftInputFromWindow(it.windowToken, 0)
             holder.binding.etReplyComment.visibility = View.GONE
             it.visibility = View.GONE
+        }
+        if (postBy) {
+            holder.binding.tvReply.visibility = View.VISIBLE
+        } else {
+            holder.binding.tvReply.visibility = View.GONE
         }
 
     }

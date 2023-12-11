@@ -1,6 +1,8 @@
 package com.example.ourculture.ui.detailmarketplace
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.ourculture.R
 import com.example.ourculture.data.Result
+import com.example.ourculture.data.remote.retrofit.response.CommmentsItem
 import com.example.ourculture.databinding.ActivityDetailMarketplaceBinding
 import com.example.ourculture.util.ViewModelFactory
 
@@ -31,8 +34,34 @@ class DetailMarketplaceActivity : AppCompatActivity() {
 
         val idItem = intent.getStringExtra(EXTRA_ID).toString()
 
+        binding.rvItemComment.apply {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+        }
+
+
+        viewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
+
+
         viewModel.getSession().observe(this) { user ->
+            Glide.with(this)
+                .load(user.avatar)
+                .error(R.drawable.baseline_account_circle_24)
+                .into(binding.profileImageDetail)
+
+            binding.profileImageDetail
+            binding.ibSendComment.setOnClickListener {
+                viewModel.postComment(user.token, idItem, binding.etAddComment.text.toString())
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(it.windowToken, 0)
+                binding.etAddComment.setText("")
+                binding.etAddComment.clearFocus()
+            }
+
             userToken = user.token
+
             viewModel.getDetailMarketItem(idItem).observe(this) { result ->
                 if (result != null) {
                     when (result) {
@@ -60,6 +89,12 @@ class DetailMarketplaceActivity : AppCompatActivity() {
                             binding.tvLocation.text = result.data.barang.location
                             binding.tvPostByName.text = result.data.barang.postBy.username
                             binding.tvDescription.text = result.data.barang.description
+
+                            viewModel.getCommentMarketItem(user.token, idItem)
+                            viewModel.listComment.observe(this) { commentItem ->
+                                setReviewData(user.token, idItem, commentItem, user.username == result.data.barang.postBy.username)
+                            }
+
                         }
                         is Result.Error -> {
                             binding.progressBar.visibility = View.GONE
@@ -73,48 +108,50 @@ class DetailMarketplaceActivity : AppCompatActivity() {
                 }
             }
 
-            viewModel.getCommentMarketItem(user.token, idItem).observe(this) { result ->
-                if (result != null) {
-                    when (result) {
-                        Result.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                        }
-                        is Result.Success -> {
-                            binding.progressBar.visibility = View.GONE
-                            val commentAdapter = CommentAdapter(this) { comment, idcomment ->
-                                viewModel.postReplyComment(user.token, idItem, idcomment, comment).observe(this) {
-                                    if (it != null) {
-                                        when (it) {
-                                            Result.Loading -> {
-                                                binding.progressBar.visibility = View.VISIBLE
-                                            }
-                                            is Result.Success -> {
-                                                binding.progressBar.visibility = View.GONE
-                                                Toast.makeText(this, it.data.message, Toast.LENGTH_SHORT).show()
-                                            }
-                                            is Result.Error -> {
-                                                binding.progressBar.visibility = View.GONE
-                                                Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
-                                            }
+//            viewModel.getCommentMarketItem(user.token, idItem).observe(this) { result ->
+//                if (result != null) {
+//                    when (result) {
+//                        Result.Loading -> {
+//                            binding.progressBar.visibility = View.VISIBLE
+//                        }
+//                        is Result.Success -> {
+//                            binding.progressBar.visibility = View.GONE
+//                            val commentAdapter = CommentAdapter(this) { comment, idcomment ->
+//                                viewModel.postReplyComment(user.token, idItem, idcomment, comment).observe(this) {
+//                                    if (it != null) {
+//                                        when (it) {
+//                                            Result.Loading -> {
+//                                                binding.progressBar.visibility = View.VISIBLE
+//                                            }
+//                                            is Result.Success -> {
+//                                                binding.progressBar.visibility = View.GONE
+//                                                Toast.makeText(this, it.data.message, Toast.LENGTH_SHORT).show()
+//                                            }
+//                                            is Result.Error -> {
+//                                                binding.progressBar.visibility = View.GONE
+//                                                Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+//                                            }
+//
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                            binding.rvItemComment.apply {
+//                                layoutManager = LinearLayoutManager(context)
+//                                setHasFixedSize(true)
+//                            }
+//                            commentAdapter.submitList(result.data)
+//                            binding.rvItemComment.adapter = commentAdapter
+//                        }
+//                        is Result.Error -> {
+//                            binding.progressBar.visibility = View.GONE
+//                        }
+//
+//                    }
+//                }
+//            }
 
-                                        }
-                                    }
-                                }
-                            }
-                            binding.rvItemComment.apply {
-                                layoutManager = LinearLayoutManager(context)
-                                setHasFixedSize(true)
-                            }
-                            commentAdapter.submitList(result.data)
-                            binding.rvItemComment.adapter = commentAdapter
-                        }
-                        is Result.Error -> {
-                            binding.progressBar.visibility = View.GONE
-                        }
 
-                    }
-                }
-            }
         }
 
         binding.btnAddWishlist.setOnClickListener {
@@ -136,6 +173,18 @@ class DetailMarketplaceActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun setReviewData(token: String,idItem: String, commentItem: List<CommmentsItem>, postBy: Boolean) {
+        val adapter = CommentAdapter(this, postBy) { comment, idComment ->
+            viewModel.postReplyComment(token, idItem, idComment, comment)
+        }
+        adapter.submitList(commentItem)
+
+        binding.rvItemComment.adapter = adapter
     }
 
     override fun onDestroy() {

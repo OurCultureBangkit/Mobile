@@ -43,18 +43,18 @@ class CultureRepository private constructor(
     private val apiService: ApiService,
     private val wishlistDao: WishlistDao
 ){
-    fun getCommentMarketItem(token: String, id: String): LiveData<Result<List<CommmentsItem>>> = liveData {
-        emit(Result.Loading)
-        try {
-            val response = apiService.getCommentMarketItem(token, id)
-            emit(Result.Success(response.commments))
-        } catch (e: HttpException){
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-            val errorMessage = errorBody.message
-            emit(Result.Error(errorMessage.toString()))
-        }
-    }
+//    fun getCommentMarketItem(token: String, id: String): LiveData<Result<List<CommmentsItem>>> = liveData {
+//        emit(Result.Loading)
+//        try {
+//            val response = apiService.getCommentMarketItem(token, id)
+//            emit(Result.Success(response.commments))
+//        } catch (e: HttpException){
+//            val jsonInString = e.response()?.errorBody()?.string()
+//            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+//            val errorMessage = errorBody.message
+//            emit(Result.Error(errorMessage.toString()))
+//        }
+//    }
 
     fun getMyBarang(token: String): LiveData<PagingData<MyBarangItem>> {
         return Pager(
@@ -95,18 +95,18 @@ class CultureRepository private constructor(
         }
     }
 
-    fun postReplyComment(token: String, idBarang: String, idKomen: String,comment: String): LiveData<Result<ReplyCommentResponse>> = liveData {
-        emit(Result.Loading)
-        try{
-            val response = apiService.postReplyComment(token, idBarang, idKomen, comment)
-            emit(Result.Success(response))
-        } catch (e: HttpException){
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-            val errorMessage = errorBody.message
-            emit(Result.Error(errorMessage.toString()))
-        }
-    }
+//    fun postReplyComment(token: String, idBarang: String, idKomen: String,comment: String): LiveData<Result<ReplyCommentResponse>> = liveData {
+//        emit(Result.Loading)
+//        try{
+//            val response = apiService.postReplyComment(token, idBarang, idKomen, comment)
+//            emit(Result.Success(response))
+//        } catch (e: HttpException){
+//            val jsonInString = e.response()?.errorBody()?.string()
+//            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+//            val errorMessage = errorBody.message
+//            emit(Result.Error(errorMessage.toString()))
+//        }
+//    }
 
     fun postUserLoginGoogle(googleId: String?, googleToken: String?, username: String?, email: String?, avatar: String?): LiveData<Result<SignInGoogleResponse>> = liveData {
         emit(Result.Loading)

@@ -56,7 +56,11 @@ class LoginActivity : AppCompatActivity() {
                         }
                         is Result.Success -> {
                             binding?.progressBar?.visibility = View.GONE
-                            viewModel.saveSession(UserModel(email, result.data.accessToken))
+                            if (result.data.profile.avatar != null) {
+                                viewModel.saveSession(UserModel(email, result.data.accessToken, result.data.profile.username, result.data.profile.avatar))
+                            } else {
+                                viewModel.saveSession(UserModel(email, result.data.accessToken, result.data.profile.username, ""))
+                            }
                             Log.d("LoginActivity", "ini token nya ${result.data.accessToken} ========")
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
@@ -107,7 +111,7 @@ class LoginActivity : AppCompatActivity() {
                             is Result.Success -> {
                                 binding?.progressBar?.visibility = View.GONE
                                 Log.d("LoginActivity", "Suksess ${resultGoogle.data.profile.email}")
-                                viewModel.saveSession(UserModel(resultGoogle.data.profile.username, resultGoogle.data.accessToken))
+                                viewModel.saveSession(UserModel(resultGoogle.data.profile.email, resultGoogle.data.accessToken, resultGoogle.data.profile.username, resultGoogle.data.profile.avatar))
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()

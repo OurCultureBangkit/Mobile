@@ -26,7 +26,7 @@ data class ProfileLogin(
 	val id: Int,
 
 	@field:SerializedName("avatar")
-	val avatar: Any?,
+	val avatar: String?,
 
 	@field:SerializedName("email")
 	val email: String,

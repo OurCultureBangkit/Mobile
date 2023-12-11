@@ -7,6 +7,7 @@ import com.example.ourculture.data.remote.retrofit.response.GetBarangCommentResp
 import com.example.ourculture.data.remote.retrofit.response.GetWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.LoginResponse
 import com.example.ourculture.data.remote.retrofit.response.MyBarangResponse
+import com.example.ourculture.data.remote.retrofit.response.PostCommentResponse
 import com.example.ourculture.data.remote.retrofit.response.PostWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.RegisterResponse
 import com.example.ourculture.data.remote.retrofit.response.ReplyCommentResponse
@@ -15,6 +16,7 @@ import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
 import com.example.ourculture.data.remote.retrofit.response.WhoamiResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
@@ -86,15 +88,6 @@ interface ApiService {
         @Field("barangId") barangId: Int?,
     ): PostWishlistResponse
 
-    @FormUrlEncoded
-    @POST("market/barang/{id_barang}/comment/{id_komen}/replies")
-    suspend fun postReplyComment(
-        @Header("Authorization") token : String,
-        @Path("id_barang") idBarang: String,
-        @Path("id_komen") idKomen: String,
-        @Field("comment") comment: String,
-        @Field("rating") rating: Float = 2.1F,
-    ): ReplyCommentResponse
 
     @GET("market/barang/detail/{id}")
     suspend fun getDetailMarketItem(
@@ -120,10 +113,43 @@ interface ApiService {
         @Field("wishListId") wishListId: Int,
         ): DeleteWishlistResponse
 
+//    @GET("market/barang/{id}/comment")
+//    suspend fun getCommentMarketItem(
+//        @Header("Authorization") token : String,
+//        @Path("id") id: String
+//    ): GetBarangCommentResponse
     @GET("market/barang/{id}/comment")
-    suspend fun getCommentMarketItem(
+    fun getCommentMarketItem(
         @Header("Authorization") token : String,
         @Path("id") id: String
-    ): GetBarangCommentResponse
+    ): Call<GetBarangCommentResponse>
+
+//    @FormUrlEncoded
+//    @POST("market/barang/{id_barang}/comment/{id_komen}/replies")
+//    suspend fun postReplyComment(
+//        @Header("Authorization") token : String,
+//        @Path("id_barang") idBarang: String,
+//        @Path("id_komen") idKomen: String,
+//        @Field("comment") comment: String,
+//        @Field("rating") rating: Float = 2.1F,
+//    ): ReplyCommentResponse
+    @FormUrlEncoded
+    @POST("market/barang/{id_barang}/comment/{id_komen}/replies")
+     fun postReplyComment(
+        @Header("Authorization") token : String,
+        @Path("id_barang") idBarang: String,
+        @Path("id_komen") idKomen: String,
+        @Field("comment") comment: String,
+        @Field("rating") rating: Float = 2.0F,
+    ): Call<ReplyCommentResponse>
+
+    @FormUrlEncoded
+    @POST("market/barang/{id_barang}/comment")
+     fun postComment(
+        @Header("Authorization") token : String,
+        @Path("id_barang") idBarang: String,
+        @Field("comment") comment: String,
+        @Field("rating") rating: Float = 2.0F,
+    ): Call<PostCommentResponse>
 
 }
