@@ -13,7 +13,6 @@ import com.example.ourculture.data.Result
 import com.example.ourculture.databinding.ActivityDetailMarketplaceBinding
 import com.example.ourculture.util.ViewModelFactory
 
-
 class DetailMarketplaceActivity : AppCompatActivity() {
     private var _binding: ActivityDetailMarketplaceBinding? = null
     private val binding get() = _binding!!
@@ -82,7 +81,26 @@ class DetailMarketplaceActivity : AppCompatActivity() {
                         }
                         is Result.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            val commentAdapter = CommentAdapter(this)
+                            val commentAdapter = CommentAdapter(this) { comment, idcomment ->
+                                viewModel.postReplyComment(user.token, idItem, idcomment, comment).observe(this) {
+                                    if (it != null) {
+                                        when (it) {
+                                            Result.Loading -> {
+                                                binding.progressBar.visibility = View.VISIBLE
+                                            }
+                                            is Result.Success -> {
+                                                binding.progressBar.visibility = View.GONE
+                                                Toast.makeText(this, it.data.message, Toast.LENGTH_SHORT).show()
+                                            }
+                                            is Result.Error -> {
+                                                binding.progressBar.visibility = View.GONE
+                                                Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
                             binding.rvItemComment.apply {
                                 layoutManager = LinearLayoutManager(context)
                                 setHasFixedSize(true)

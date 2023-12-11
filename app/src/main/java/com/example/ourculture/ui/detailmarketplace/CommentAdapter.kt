@@ -18,7 +18,7 @@ import com.example.ourculture.R
 import com.example.ourculture.data.remote.retrofit.response.CommmentsItem
 import com.example.ourculture.databinding.ItemCommentBinding
 
-class CommentAdapter(private val context: Context): ListAdapter<CommmentsItem, CommentAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class CommentAdapter(private val context: Context, private val onIbReplyCommentClick: (String, String) -> Unit): ListAdapter<CommmentsItem, CommentAdapter.MyViewHolder>(DIFF_CALLBACK) {
     class MyViewHolder(val binding: ItemCommentBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(context: Context, commentItem: CommmentsItem){
             binding.tvReply.setOnClickListener {
@@ -29,11 +29,6 @@ class CommentAdapter(private val context: Context): ListAdapter<CommmentsItem, C
                 imm.showSoftInput(binding.etReplyComment, InputMethodManager.SHOW_IMPLICIT)
             }
 
-            binding.ibSendReplyComment.setOnClickListener {
-
-                val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(it.windowToken, 0)
-            }
 
             if (commentItem.postBy.avatar != null) {
                 Glide.with(binding.root.context)
@@ -73,6 +68,14 @@ class CommentAdapter(private val context: Context): ListAdapter<CommmentsItem, C
         if (wishList != null) {
             holder.bind(context, wishList)
         }
+        holder.binding.ibSendReplyComment.setOnClickListener {
+            onIbReplyCommentClick(holder.binding.etReplyComment.text.toString(), wishList.id.toString())
+            val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
+            holder.binding.etReplyComment.visibility = View.GONE
+            it.visibility = View.GONE
+        }
+
     }
 
     companion object{

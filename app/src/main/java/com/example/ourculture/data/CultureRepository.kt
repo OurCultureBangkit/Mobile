@@ -22,6 +22,7 @@ import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
 import com.example.ourculture.data.remote.retrofit.response.MyBarangItem
 import com.example.ourculture.data.remote.retrofit.response.PostWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.ProfileWhoami
+import com.example.ourculture.data.remote.retrofit.response.ReplyCommentResponse
 import com.example.ourculture.data.remote.retrofit.response.SignInGoogleResponse
 import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
 import com.example.ourculture.database.WishlistDao
@@ -33,6 +34,9 @@ import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.HttpException
+import retrofit2.http.Field
+import retrofit2.http.Header
+import retrofit2.http.Path
 
 class CultureRepository private constructor(
     private val userPreference: UserPreference,
@@ -82,6 +86,19 @@ class CultureRepository private constructor(
         emit(Result.Loading)
         try{
             val response = apiService.login(email, password)
+            emit(Result.Success(response))
+        } catch (e: HttpException){
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+    }
+
+    fun postReplyComment(token: String, idBarang: String, idKomen: String,comment: String): LiveData<Result<ReplyCommentResponse>> = liveData {
+        emit(Result.Loading)
+        try{
+            val response = apiService.postReplyComment(token, idBarang, idKomen, comment)
             emit(Result.Success(response))
         } catch (e: HttpException){
             val jsonInString = e.response()?.errorBody()?.string()

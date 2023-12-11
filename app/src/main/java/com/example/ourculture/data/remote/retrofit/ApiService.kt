@@ -9,6 +9,7 @@ import com.example.ourculture.data.remote.retrofit.response.LoginResponse
 import com.example.ourculture.data.remote.retrofit.response.MyBarangResponse
 import com.example.ourculture.data.remote.retrofit.response.PostWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.RegisterResponse
+import com.example.ourculture.data.remote.retrofit.response.ReplyCommentResponse
 import com.example.ourculture.data.remote.retrofit.response.SignInGoogleResponse
 import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
 import com.example.ourculture.data.remote.retrofit.response.WhoamiResponse
@@ -84,6 +85,16 @@ interface ApiService {
         @Header("Authorization") token : String,
         @Field("barangId") barangId: Int?,
     ): PostWishlistResponse
+
+    @FormUrlEncoded
+    @POST("market/barang/{id_barang}/comment/{id_komen}/replies")
+    suspend fun postReplyComment(
+        @Header("Authorization") token : String,
+        @Path("id_barang") idBarang: String,
+        @Path("id_komen") idKomen: String,
+        @Field("comment") comment: String,
+        @Field("rating") rating: Float = 2.1F,
+    ): ReplyCommentResponse
 
     @GET("market/barang/detail/{id}")
     suspend fun getDetailMarketItem(

@@ -40,9 +40,6 @@ data class RepliesItem(
 	@field:SerializedName("postBy")
 	val postBy: CommentPostBy,
 
-	@field:SerializedName("rating")
-	val rating: Int,
-
 	@field:SerializedName("comment")
 	val comment: String,
 
@@ -63,9 +60,6 @@ data class CommmentsItem(
 
 	@field:SerializedName("postBy")
 	val postBy: CommentPostBy,
-
-	@field:SerializedName("rating")
-	val rating: Int,
 
 	@field:SerializedName("comment")
 	val comment: String,

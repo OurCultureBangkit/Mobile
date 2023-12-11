@@ -16,4 +16,6 @@ class DetailMarketplaceViewModel(private val cultureRepository: CultureRepositor
     }
 
     fun getCommentMarketItem(token: String, id: String) = cultureRepository.getCommentMarketItem(token, id)
+
+    fun postReplyComment(token: String, idBarang: String, idKomen: String,comment: String) = cultureRepository.postReplyComment(token, idBarang, idKomen, comment)
 }
