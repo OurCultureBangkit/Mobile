@@ -1,6 +1,7 @@
 package com.example.ourculture.data
 
 import android.graphics.pdf.PdfDocument.Page
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
@@ -27,6 +28,7 @@ import com.example.ourculture.data.remote.retrofit.response.SignInGoogleResponse
 import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
 import com.example.ourculture.database.WishlistDao
 import com.example.ourculture.database.WishlistEntity
+import com.example.ourculture.ui.detailmarketplace.CommentPagingSource
 import com.example.ourculture.ui.marketplace.MarketplacePagingSource
 import com.example.ourculture.ui.setting.MyBarangPagingSource
 import com.google.gson.Gson
@@ -43,19 +45,18 @@ class CultureRepository private constructor(
     private val apiService: ApiService,
     private val wishlistDao: WishlistDao
 ){
-//    fun getCommentMarketItem(token: String, id: String): LiveData<Result<List<CommmentsItem>>> = liveData {
-//        emit(Result.Loading)
-//        try {
-//            val response = apiService.getCommentMarketItem(token, id)
-//            emit(Result.Success(response.commments))
-//        } catch (e: HttpException){
-//            val jsonInString = e.response()?.errorBody()?.string()
-//            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-//            val errorMessage = errorBody.message
-//            emit(Result.Error(errorMessage.toString()))
-//        }
-//    }
-
+    fun getCommentMarketItem(id: String): LiveData<PagingData<CommmentsItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5,
+                enablePlaceholders = false,
+                initialLoadSize = 5
+            ),
+            pagingSourceFactory = {
+                CommentPagingSource(apiService, id)
+            }
+        ).liveData
+    }
     fun getMyBarang(token: String): LiveData<PagingData<MyBarangItem>> {
         return Pager(
             config = PagingConfig(
@@ -95,19 +96,6 @@ class CultureRepository private constructor(
         }
     }
 
-//    fun postReplyComment(token: String, idBarang: String, idKomen: String,comment: String): LiveData<Result<ReplyCommentResponse>> = liveData {
-//        emit(Result.Loading)
-//        try{
-//            val response = apiService.postReplyComment(token, idBarang, idKomen, comment)
-//            emit(Result.Success(response))
-//        } catch (e: HttpException){
-//            val jsonInString = e.response()?.errorBody()?.string()
-//            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-//            val errorMessage = errorBody.message
-//            emit(Result.Error(errorMessage.toString()))
-//        }
-//    }
-
     fun postUserLoginGoogle(googleId: String?, googleToken: String?, username: String?, email: String?, avatar: String?): LiveData<Result<SignInGoogleResponse>> = liveData {
         emit(Result.Loading)
         try{
@@ -118,7 +106,24 @@ class CultureRepository private constructor(
         }
     }
 
-     fun postUserRegister(username: String, password: String, repeatPassword: String, email: String): LiveData<Result<RegisterResponse>> = liveData {
+    suspend fun postComment(token: String, idBarang: String, comment: String) {
+        try {
+            apiService.postComment(token, idBarang, comment)
+        } catch (e:Exception) {
+            Log.e("CultureRepository", e.toString())
+        }
+    }
+
+    suspend fun postReplyComment(token: String, idBarang: String, idKomen: String,comment: String) {
+        try {
+            apiService.postReplyComment(token, idBarang, idKomen, comment)
+        } catch (e:Exception) {
+            Log.e("CultureRepository", e.toString())
+        }
+    }
+
+
+    fun postUserRegister(username: String, password: String, repeatPassword: String, email: String): LiveData<Result<RegisterResponse>> = liveData {
         emit(Result.Loading)
         try{
             val response = apiService.register(username, password, repeatPassword, email)

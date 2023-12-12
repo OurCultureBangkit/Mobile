@@ -10,15 +10,17 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ourculture.R
+import com.example.ourculture.data.remote.retrofit.response.BarangItem
 import com.example.ourculture.data.remote.retrofit.response.CommmentsItem
 import com.example.ourculture.databinding.ItemCommentBinding
 
-class CommentAdapter(private val context: Context, private val postBy:Boolean, private val onIbReplyCommentClick: (String, String) -> Unit): ListAdapter<CommmentsItem, CommentAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class CommentAdapter(private val context: Context, private val postBy:Boolean, private val onIbReplyCommentClick: (String, String) -> Unit): PagingDataAdapter<CommmentsItem, CommentAdapter.MyViewHolder>(DIFF_CALLBACK) {
     class MyViewHolder(val binding: ItemCommentBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(context: Context, commentItem: CommmentsItem){
             binding.tvReply.setOnClickListener {
@@ -66,39 +68,32 @@ class CommentAdapter(private val context: Context, private val postBy:Boolean, p
         val wishList = getItem(position)
         if (wishList != null) {
             holder.bind(context, wishList)
+            holder.binding.ibSendReplyComment.setOnClickListener {
+                onIbReplyCommentClick(holder.binding.etReplyComment.text.toString(), wishList.id.toString())
+                val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(it.windowToken, 0)
+                holder.binding.etReplyComment.visibility = View.GONE
+                it.visibility = View.GONE
+            }
+            if (postBy) {
+                holder.binding.tvReply.visibility = View.VISIBLE
+            } else {
+                holder.binding.tvReply.visibility = View.GONE
+            }
         }
-        holder.binding.ibSendReplyComment.setOnClickListener {
-            onIbReplyCommentClick(holder.binding.etReplyComment.text.toString(), wishList.id.toString())
-            val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(it.windowToken, 0)
-            holder.binding.etReplyComment.visibility = View.GONE
-            it.visibility = View.GONE
-        }
-        if (postBy) {
-            holder.binding.tvReply.visibility = View.VISIBLE
-        } else {
-            holder.binding.tvReply.visibility = View.GONE
-        }
+
 
     }
 
     companion object{
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<CommmentsItem> =
-            object : DiffUtil.ItemCallback<CommmentsItem>() {
-                override fun areItemsTheSame(
-                    oldItem: CommmentsItem,
-                    newItem: CommmentsItem
-                ): Boolean {
-                    return oldItem == newItem
-                }
-
-                override fun areContentsTheSame(
-                    oldItem: CommmentsItem,
-                    newItem: CommmentsItem
-                ): Boolean {
-                    return oldItem == newItem
-                }
-
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CommmentsItem>() {
+            override fun areItemsTheSame(oldItem: CommmentsItem, newItem: CommmentsItem): Boolean {
+                return oldItem == newItem
             }
+
+            override fun areContentsTheSame(oldItem: CommmentsItem, newItem: CommmentsItem): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
     }
 }

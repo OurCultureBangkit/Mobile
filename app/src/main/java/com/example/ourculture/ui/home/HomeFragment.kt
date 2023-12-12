@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.ourculture.databinding.FragmentHomeBinding
-import com.example.ourculture.ui.main.LoadingStateAdapter
 import com.example.ourculture.util.ViewModelFactory
 
 class HomeFragment : Fragment() {

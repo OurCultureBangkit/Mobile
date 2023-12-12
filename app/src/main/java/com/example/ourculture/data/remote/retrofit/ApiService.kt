@@ -57,11 +57,6 @@ interface ApiService {
         @Field("avatar") avatar: String?
     ): SignInGoogleResponse
 
-    @GET("market/barang")
-    suspend fun getAllMarket(
-        @Query("page") page: Int = 1,
-        @Query("limit") limit: Int = 5
-    ): BarangResponse
 
     @GET("user/market/barang")
     suspend fun getMyBarang(
@@ -118,38 +113,37 @@ interface ApiService {
 //        @Header("Authorization") token : String,
 //        @Path("id") id: String
 //    ): GetBarangCommentResponse
-    @GET("market/barang/{id}/comment")
-    fun getCommentMarketItem(
-        @Header("Authorization") token : String,
-        @Path("id") id: String
-    ): Call<GetBarangCommentResponse>
 
-//    @FormUrlEncoded
-//    @POST("market/barang/{id_barang}/comment/{id_komen}/replies")
-//    suspend fun postReplyComment(
-//        @Header("Authorization") token : String,
-//        @Path("id_barang") idBarang: String,
-//        @Path("id_komen") idKomen: String,
-//        @Field("comment") comment: String,
-//        @Field("rating") rating: Float = 2.1F,
-//    ): ReplyCommentResponse
+    @GET("market/barang/{id}/comment")
+    suspend fun getCommentMarketItem(
+        @Path("id") id: String,
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 5
+    ): GetBarangCommentResponse
+
+    @GET("market/barang")
+    suspend fun getAllMarket(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 5
+    ): BarangResponse
+
     @FormUrlEncoded
     @POST("market/barang/{id_barang}/comment/{id_komen}/replies")
-     fun postReplyComment(
+     suspend fun postReplyComment(
         @Header("Authorization") token : String,
         @Path("id_barang") idBarang: String,
         @Path("id_komen") idKomen: String,
         @Field("comment") comment: String,
         @Field("rating") rating: Float = 2.0F,
-    ): Call<ReplyCommentResponse>
+    ): ReplyCommentResponse
 
     @FormUrlEncoded
     @POST("market/barang/{id_barang}/comment")
-     fun postComment(
+     suspend fun postComment(
         @Header("Authorization") token : String,
         @Path("id_barang") idBarang: String,
         @Field("comment") comment: String,
         @Field("rating") rating: Float = 2.0F,
-    ): Call<PostCommentResponse>
+    ): PostCommentResponse
 
 }
