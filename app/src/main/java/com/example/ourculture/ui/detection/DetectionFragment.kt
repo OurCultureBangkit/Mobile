@@ -10,9 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
+import com.bumptech.glide.Glide
 import com.example.ourculture.R
 import com.example.ourculture.databinding.FragmentDetectionBinding
 import com.example.ourculture.ui.camera.CameraActivity
+import com.example.ourculture.ui.detail.DetailCultureActivity
 
 class DetectionFragment : Fragment() {
     private var _binding: FragmentDetectionBinding? = null
@@ -24,6 +26,7 @@ class DetectionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetectionBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -42,8 +45,20 @@ class DetectionFragment : Fragment() {
         ActivityResultContracts.StartActivityForResult()
     ) {
         if (it.resultCode == CameraActivity.CAMERAX_RESULT) {
-            currentImageUri = it.data?.getStringExtra(CameraActivity.EXTRA_CAMERAX_IMAGE)?.toUri()
-            showImage()
+            //currentImageUri = it.data?.getStringExtra(CameraActivity.EXTRA_CAMERAX_IMAGE)?.toUri()
+            binding.tvDetectionLabel.text = it.data?.getStringExtra(CameraActivity.EXTRA_OUTPUT_NAME).toString()
+            Glide.with(this)
+                .load(it.data?.getStringExtra(CameraActivity.EXTRA_IMAGE_URL))
+                .into(binding.ivDetectImage)
+
+            val idCulture = it.data?.getIntExtra(CameraActivity.EXTRA_ID_DETECT, -1)
+
+            binding.btnPelajariSelengkapnya.setOnClickListener {
+                val intent = Intent(requireActivity(), DetailCultureActivity::class.java)
+                intent.putExtra(DetailCultureActivity.EXTRA_ID, idCulture)
+                startActivity(intent)
+            }
+            //showImage()
         }
     }
 

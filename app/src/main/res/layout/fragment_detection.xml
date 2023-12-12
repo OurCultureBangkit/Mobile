@@ -13,7 +13,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/baseline_image_24"/>
+        android:src="@drawable/baseline_image_24"
+        android:scaleType="fitXY"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineHorizontal"

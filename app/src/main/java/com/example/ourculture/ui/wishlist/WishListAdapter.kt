@@ -20,7 +20,7 @@ class WishListAdapter(private val onTrashcanClick: (WishlistEntity) -> Unit): Li
                 .load(barangItemWishList.urlToImage)
                 .into(binding.ivImgWishlistItem)
             binding.tvItemTitle.text = barangItemWishList.itemName
-            binding.tvWishlistPrice.text = "Rp.${barangItemWishList.itemName}"
+            binding.tvWishlistPrice.text = "Rp.${barangItemWishList.price}"
             binding.tvItemLocation.text = barangItemWishList.location
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, DetailMarketplaceActivity::class.java)

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.ourculture.data.CultureRepository
 import com.example.ourculture.di.Injection
+import com.example.ourculture.ui.camera.CameraViewModel
 import com.example.ourculture.ui.detail.DetailCultureViewModel
 import com.example.ourculture.ui.detailmarketplace.DetailMarketplaceViewModel
 import com.example.ourculture.ui.home.HomeViewModel
@@ -49,6 +50,9 @@ class ViewModelFactory private constructor(private val repository: CultureReposi
             }
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(CameraViewModel::class.java) -> {
+                CameraViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

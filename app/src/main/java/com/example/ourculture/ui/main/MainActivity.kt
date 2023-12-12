@@ -57,6 +57,8 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        replaceFragment(HomeFragment())
+
 
         viewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {
@@ -69,15 +71,15 @@ class MainActivity : AppCompatActivity() {
                 binding.progressBar.visibility = View.GONE
                 binding.appBarLayout.visibility = View.VISIBLE
                 binding.bottomNavigation.visibility = View.VISIBLE
-                val fragmentManager = supportFragmentManager
-                val homeFragment = HomeFragment()
-                val fragment = fragmentManager.findFragmentByTag(HomeFragment::class.java.simpleName)
-                if (fragment !is HomeFragment) {
-                    fragmentManager
-                        .beginTransaction()
-                        .add(R.id.frame_container, homeFragment, HomeFragment::class.java.simpleName)
-                        .commit()
-                }
+//                val fragmentManager = supportFragmentManager
+//                val homeFragment = HomeFragment()
+//                val fragment = fragmentManager.findFragmentByTag(HomeFragment::class.java.simpleName)
+//                if (fragment !is HomeFragment) {
+//                    fragmentManager
+//                        .beginTransaction()
+//                        .add(R.id.frame_container, homeFragment, HomeFragment::class.java.simpleName)
+//                        .commit()
+//                }
 
                 binding.bottomNavigation.setOnItemSelectedListener {
                     when (it.itemId) {

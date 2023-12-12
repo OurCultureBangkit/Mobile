@@ -32,6 +32,10 @@ class DetailMarketplaceActivity : AppCompatActivity() {
         _binding = ActivityDetailMarketplaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.topAppBar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
         val idItem = intent.getStringExtra(EXTRA_ID).toString()
 
 
@@ -139,6 +143,12 @@ class DetailMarketplaceActivity : AppCompatActivity() {
         adapter.submitData(lifecycle, commentItem)
         binding.rvItemComment.adapter = adapter
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()

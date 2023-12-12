@@ -38,7 +38,7 @@ class CameraActivity : AppCompatActivity() {
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var imageCapture: ImageCapture? = null
 
-    private val viewModel by viewModels<InsertMarketplaceViewModel> {
+    private val viewModel by viewModels<CameraViewModel> {
         ViewModelFactory.getInstance(this)
     }
 
@@ -84,43 +84,33 @@ class CameraActivity : AppCompatActivity() {
 
     private fun detectImage(uri: Uri) {
         val imageFile = uriToFile(uri, this).reduceFileImage()
-        val harga = "10000"
-        val title = "TesUpload"
-        val description = "Description Tes Upload"
-        val location = "Location Tes Upload"
-        val stock = "100"
-        val rbHarga = harga.toRequestBody("text/plain".toMediaType())
-        val rbTitle = title.toRequestBody("text/plain".toMediaType())
-        val rbDescription = description.toRequestBody("text/plain".toMediaType())
-        val rbLocation = location.toRequestBody("text/plain".toMediaType())
-        val rbStock = stock.toRequestBody("text/plain".toMediaType())
         val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
         val multipartBody = MultipartBody.Part.createFormData(
             "image",
             imageFile.name,
             requestImageFile
         )
-        viewModel.getSession().observe(this) { user ->
-            viewModel.uploadToMarket(user.token, multipartBody, rbHarga, rbTitle, rbDescription, rbLocation, rbStock).observe(this) { result ->
-                if (result != null) {
-                    when (result) {
-                        Result.Loading -> {
-                            binding.pbCamera.visibility = View.VISIBLE
-                        }
-                        is Result.Success -> {
-                            binding.pbCamera.visibility = View.GONE
-                            Toast.makeText(this, result.data.message, Toast.LENGTH_SHORT).show()
-                            val intent = Intent()
-                            intent.putExtra(EXTRA_CAMERAX_IMAGE, uri.toString())
-                            setResult(CAMERAX_RESULT, intent)
-                            finish()
-                        }
-                        is Result.Error -> {
-                            binding.pbCamera.visibility = View.GONE
-
-                        }
+        viewModel.uploadToDetection(multipartBody).observe(this) { result ->
+            if (result != null) {
+                when (result) {
+                    Result.Loading -> {
+                        binding.pbCamera.visibility = View.VISIBLE
+                    }
+                    is Result.Success -> {
+                        binding.pbCamera.visibility = View.GONE
+//                            intent.putExtra(EXTRA_CAMERAX_IMAGE, uri.toString())
+                        intent.putExtra(EXTRA_IMAGE_URL, result.data.image)
+                        intent.putExtra(EXTRA_OUTPUT_NAME, result.data.name)
+                        intent.putExtra(EXTRA_ID_DETECT, result.data.id)
+                        setResult(CAMERAX_RESULT, intent)
+                        finish()
 
                     }
+                    is Result.Error -> {
+                        binding.pbCamera.visibility = View.GONE
+                        Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                    }
+
                 }
             }
         }
@@ -202,6 +192,9 @@ class CameraActivity : AppCompatActivity() {
         private const val TAG = "CameraActivity"
         const val EXTRA_CAMERAX_IMAGE = "CameraX Image"
         const val CAMERAX_RESULT = 200
+        const val EXTRA_OUTPUT_NAME = "extra_output_name"
+        const val EXTRA_IMAGE_URL = "extra_image_url"
+        const val EXTRA_ID_DETECT = "extra_id_detect"
     }
 
 }

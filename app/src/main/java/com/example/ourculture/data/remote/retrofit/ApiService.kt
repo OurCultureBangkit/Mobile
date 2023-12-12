@@ -10,6 +10,7 @@ import com.example.ourculture.data.remote.retrofit.response.GetWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.LoginResponse
 import com.example.ourculture.data.remote.retrofit.response.MyBarangResponse
 import com.example.ourculture.data.remote.retrofit.response.PostCommentResponse
+import com.example.ourculture.data.remote.retrofit.response.PostImageDetectionResponse
 import com.example.ourculture.data.remote.retrofit.response.PostWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.RegisterResponse
 import com.example.ourculture.data.remote.retrofit.response.ReplyCommentResponse
@@ -108,6 +109,12 @@ interface ApiService {
         @Part("location") location: RequestBody,
         @Part("stock") stock: RequestBody,
     ): UploadMarketResponse
+
+    @Multipart
+    @POST("ml/vision")
+    suspend fun uploadToDetection(
+        @Part file: MultipartBody.Part,
+    ): PostImageDetectionResponse
 
     @FormUrlEncoded
     @HTTP(method = "DELETE", path = "market/wishlist", hasBody = true)
