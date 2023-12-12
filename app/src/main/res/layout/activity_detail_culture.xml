@@ -46,9 +46,11 @@
         app:layout_constraintTop_toBottomOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:src="@drawable/ic_launcher_background"
+        android:src="@drawable/ic_launcher_background"
         android:scaleType="centerCrop"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
     <TextView
         android:id="@+id/tv_description"

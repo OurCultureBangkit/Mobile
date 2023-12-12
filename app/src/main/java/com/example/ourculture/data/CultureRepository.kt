@@ -18,8 +18,11 @@ import com.example.ourculture.data.remote.retrofit.ApiService
 import com.example.ourculture.data.remote.retrofit.response.BarangItem
 import com.example.ourculture.data.remote.retrofit.response.BarangItemWishList
 import com.example.ourculture.data.remote.retrofit.response.CommmentsItem
+import com.example.ourculture.data.remote.retrofit.response.CultureData
+import com.example.ourculture.data.remote.retrofit.response.DataItem
 import com.example.ourculture.data.remote.retrofit.response.DeleteWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
+import com.example.ourculture.data.remote.retrofit.response.GetDetailCultureResponse
 import com.example.ourculture.data.remote.retrofit.response.MyBarangItem
 import com.example.ourculture.data.remote.retrofit.response.PostWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.ProfileWhoami
@@ -29,6 +32,7 @@ import com.example.ourculture.data.remote.retrofit.response.UploadMarketResponse
 import com.example.ourculture.database.WishlistDao
 import com.example.ourculture.database.WishlistEntity
 import com.example.ourculture.ui.detailmarketplace.CommentPagingSource
+import com.example.ourculture.ui.home.CulturePagingSource
 import com.example.ourculture.ui.marketplace.MarketplacePagingSource
 import com.example.ourculture.ui.setting.MyBarangPagingSource
 import com.google.gson.Gson
@@ -82,6 +86,19 @@ class CultureRepository private constructor(
             }
         ).liveData
 
+    }
+
+    fun getAllCulture(): LiveData<PagingData<DataItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5,
+                enablePlaceholders = false,
+                initialLoadSize = 5
+            ),
+            pagingSourceFactory = {
+                CulturePagingSource(apiService)
+            }
+        ).liveData
     }
     fun postUserLogin(email: String, password: String): LiveData<Result<LoginResponse>> = liveData {
         emit(Result.Loading)
@@ -210,6 +227,19 @@ class CultureRepository private constructor(
         try {
             val response = apiService.getDetailMarketItem(idStory)
             emit(Result.Success(response))
+        } catch (e: HttpException){
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+    }
+
+    fun getDetailCulture(idCulture: Int): LiveData<Result<CultureData>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getDetailCulture(idCulture)
+            emit(Result.Success(response.data))
         } catch (e: HttpException){
             val jsonInString = e.response()?.errorBody()?.string()
             val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)

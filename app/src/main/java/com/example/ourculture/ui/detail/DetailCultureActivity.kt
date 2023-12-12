@@ -20,21 +20,43 @@ class DetailCultureActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
 
-    private var binding: ActivityDetailCultureBinding? = null
+    private var _binding: ActivityDetailCultureBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDetailCultureBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+        _binding = ActivityDetailCultureBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        setSupportActionBar(binding?.topAppBar)
+        setSupportActionBar(binding.topAppBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val idUser = intent.getStringExtra(EXTRA_ID)
+        val idCulture = intent.getIntExtra(EXTRA_ID, -1)
+        viewModel.getDetailCulture(idCulture).observe(this) { result ->
+            if (result != null) {
+                when (result) {
+                    Result.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is Result.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.tvTitle.text = result.data.name
+                        Glide.with(this)
+                            .load(result.data.image)
+                            .into(binding.ivDetailPhoto)
+                        binding.tvDescription.text = result.data.description
+                        binding.ivDetailPhoto.visibility = View.VISIBLE
+                    }
+                    is Result.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.ivDetailPhoto.visibility = View.VISIBLE
+                        Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                    }
 
-        viewModel.getSession().observe(this) { user ->
-
+                }
+            }
         }
+
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -63,7 +85,6 @@ class DetailCultureActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-
-        binding = null
+        _binding = null
     }
 }

@@ -69,7 +69,6 @@ class WishlistFragment : Fragment() {
                         is Result.Error -> {
                             binding.pbWishlist.visibility = View.GONE
                             binding.tvWishlistEmpty.visibility = View.VISIBLE
-
                         }
 
                     }

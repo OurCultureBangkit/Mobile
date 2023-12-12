@@ -3,7 +3,9 @@ package com.example.ourculture.data.remote.retrofit
 import com.example.ourculture.data.remote.retrofit.response.BarangResponse
 import com.example.ourculture.data.remote.retrofit.response.DeleteWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
+import com.example.ourculture.data.remote.retrofit.response.GetAllCultureResponse
 import com.example.ourculture.data.remote.retrofit.response.GetBarangCommentResponse
+import com.example.ourculture.data.remote.retrofit.response.GetDetailCultureResponse
 import com.example.ourculture.data.remote.retrofit.response.GetWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.LoginResponse
 import com.example.ourculture.data.remote.retrofit.response.MyBarangResponse
@@ -89,6 +91,12 @@ interface ApiService {
         @Path("id") id: String
     ): DetailBarangResponse
 
+    @GET("culture/{id_culture}")
+    suspend fun getDetailCulture(
+        @Path("id_culture") idCulture: Int
+    ): GetDetailCultureResponse
+
+
     @Multipart
     @POST("market/barang")
     suspend fun uploadToMarket(
@@ -108,18 +116,18 @@ interface ApiService {
         @Field("wishListId") wishListId: Int,
         ): DeleteWishlistResponse
 
-//    @GET("market/barang/{id}/comment")
-//    suspend fun getCommentMarketItem(
-//        @Header("Authorization") token : String,
-//        @Path("id") id: String
-//    ): GetBarangCommentResponse
-
     @GET("market/barang/{id}/comment")
     suspend fun getCommentMarketItem(
         @Path("id") id: String,
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 5
     ): GetBarangCommentResponse
+
+    @GET("culture")
+    suspend fun getAllCulture(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 5
+    ): GetAllCultureResponse
 
     @GET("market/barang")
     suspend fun getAllMarket(

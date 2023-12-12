@@ -55,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="@+id/tv_title"
             android:textSize="16sp"
             android:textColor="@color/black"
-            android:maxLines="1"
+            android:maxLines="2"
             android:ellipsize="end"/>
 
 
