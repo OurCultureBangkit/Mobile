@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 
 class DetailCultureViewModel(private val cultureRepository: CultureRepository): ViewModel() {
 
-
     fun getDetailCulture(idCulture: Int) = cultureRepository.getDetailCulture(idCulture)
 
 

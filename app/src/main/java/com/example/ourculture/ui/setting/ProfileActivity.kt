@@ -28,7 +28,15 @@ class ProfileActivity : AppCompatActivity() {
         setSupportActionBar(binding.topAppBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+    }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    override fun onResume() {
+        super.onResume()
         val profilAdapter = ProfileAdapter()
         binding.rvItemMyBarang.apply {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -65,19 +73,13 @@ class ProfileActivity : AppCompatActivity() {
                 profilAdapter.submitData(lifecycle, result)
                 binding.rvItemMyBarang.adapter = profilAdapter
             }
+
         }
 
         MyBarangPagingSource.isLoading.observe(this) {
             showLoading(it)
         }
-
     }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
 
     private fun showLoading(isLoading: Boolean) {
         binding.pbProfile.visibility = if (isLoading) View.VISIBLE else View.GONE

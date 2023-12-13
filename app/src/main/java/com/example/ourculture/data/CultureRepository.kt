@@ -20,6 +20,7 @@ import com.example.ourculture.data.remote.retrofit.response.BarangItemWishList
 import com.example.ourculture.data.remote.retrofit.response.CommmentsItem
 import com.example.ourculture.data.remote.retrofit.response.CultureData
 import com.example.ourculture.data.remote.retrofit.response.DataItem
+import com.example.ourculture.data.remote.retrofit.response.DeleteMyBarangResponse
 import com.example.ourculture.data.remote.retrofit.response.DeleteWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
 import com.example.ourculture.data.remote.retrofit.response.DetectionData
@@ -253,6 +254,19 @@ class CultureRepository private constructor(
         emit(Result.Loading)
         try {
             val response = apiService.uploadToMarket(token, file, harga, title, description, location, stock)
+            emit(Result.Success(response))
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            emit(Result.Error(errorMessage.toString()))
+        }
+    }
+
+    fun deleteMyBarang(token: String, idBarang: String): LiveData<Result<DeleteMyBarangResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.deleteMyBarang(token, idBarang)
             emit(Result.Success(response))
         } catch (e: HttpException) {
             val jsonInString = e.response()?.errorBody()?.string()

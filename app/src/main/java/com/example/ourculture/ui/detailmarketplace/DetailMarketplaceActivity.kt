@@ -3,10 +3,13 @@ package com.example.ourculture.ui.detailmarketplace
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.marginTop
+import androidx.core.view.setMargins
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -72,6 +75,34 @@ class DetailMarketplaceActivity : AppCompatActivity() {
                             binding.progressBar.visibility = View.VISIBLE
                         }
                         is Result.Success -> {
+                            if (user.username == result.data.barang.postBy.username) {
+                                binding.btnDeleteWishlist.visibility = View.VISIBLE
+                                val layoutParams = binding.comment.layoutParams as ViewGroup.MarginLayoutParams
+                                layoutParams.setMargins(0,150,0,0)
+                                binding.comment.layoutParams = layoutParams
+
+                                binding.btnDeleteWishlist.setOnClickListener {
+                                    viewModel.deleteMyBarang(user.token, idItem).observe(this) { deleteResult ->
+                                        if (deleteResult != null) {
+                                            when (deleteResult) {
+                                                Result.Loading -> {
+                                                    binding.progressBar.visibility = View.VISIBLE
+                                                }
+                                                is Result.Success -> {
+                                                    binding.progressBar.visibility = View.GONE
+                                                    Toast.makeText(this, deleteResult.data.message, Toast.LENGTH_SHORT).show()
+                                                    finish()
+                                                }
+                                                is Result.Error -> {
+                                                    binding.progressBar.visibility = View.GONE
+                                                    Toast.makeText(this, deleteResult.error, Toast.LENGTH_SHORT).show()
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             barangId = result.data.barang.id
                             binding.progressBar.visibility = View.GONE
                             binding.tvDescriptionText.text = resources.getString(R.string.deskripsi)

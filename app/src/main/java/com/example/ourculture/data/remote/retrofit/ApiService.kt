@@ -1,6 +1,7 @@
 package com.example.ourculture.data.remote.retrofit
 
 import com.example.ourculture.data.remote.retrofit.response.BarangResponse
+import com.example.ourculture.data.remote.retrofit.response.DeleteMyBarangResponse
 import com.example.ourculture.data.remote.retrofit.response.DeleteWishlistResponse
 import com.example.ourculture.data.remote.retrofit.response.DetailBarangResponse
 import com.example.ourculture.data.remote.retrofit.response.GetAllCultureResponse
@@ -122,6 +123,11 @@ interface ApiService {
         @Header("Authorization") token : String,
         @Field("wishListId") wishListId: Int,
         ): DeleteWishlistResponse
+    @DELETE("user/market/barang/{barangId}")
+    suspend fun deleteMyBarang(
+        @Header("Authorization") token : String,
+        @Path("barangId") barangId: String,
+        ): DeleteMyBarangResponse
 
     @GET("market/barang/{id}/comment")
     suspend fun getCommentMarketItem(

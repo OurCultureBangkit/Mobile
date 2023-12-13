@@ -19,6 +19,8 @@ class DetailMarketplaceViewModel(private val cultureRepository: CultureRepositor
     private val _listComment = MutableLiveData<PagingData<CommmentsItem>>()
     val listComment: LiveData<PagingData<CommmentsItem>> = _listComment
 
+    fun deleteMyBarang(token: String, idBarang: String) = cultureRepository.deleteMyBarang(token, idBarang)
+
     fun getDetailMarketItem(idItem: String) = cultureRepository.getDetailMarketItem(idItem)
 
     fun postUserWishlist(token: String, barangId: Int) = cultureRepository.postUserWishlist(token, barangId)
