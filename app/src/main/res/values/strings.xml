@@ -48,5 +48,6 @@
     <string name="reply">Reply</string>
     <string name="reply_comment">Reply Comment...</string>
     <string name="pelajari_lebih_lanjut">Pelajari lebih lanjut</string>
+    <string name="detection_on_progress">Detection On Progress</string>
 
 </resources>

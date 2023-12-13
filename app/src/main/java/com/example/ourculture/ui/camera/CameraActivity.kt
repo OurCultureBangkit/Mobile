@@ -1,5 +1,6 @@
 package com.example.ourculture.ui.camera
 
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.example.ourculture.data.Result
 import com.example.ourculture.databinding.ActivityCameraBinding
+import com.example.ourculture.databinding.DialogProgressBinding
 import com.example.ourculture.ui.detection.DetectionActivity
 import com.example.ourculture.ui.insertmarketplace.InsertMarketplaceViewModel
 import com.example.ourculture.util.ViewModelFactory
@@ -37,6 +39,8 @@ class CameraActivity : AppCompatActivity() {
 
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var imageCapture: ImageCapture? = null
+    private lateinit var mProgressDialog: Dialog
+
 
     private val viewModel by viewModels<CameraViewModel> {
         ViewModelFactory.getInstance(this)
@@ -66,6 +70,21 @@ class CameraActivity : AppCompatActivity() {
 
     }
 
+    fun showProgressDialog() {
+        mProgressDialog = Dialog(this)
+
+        val binding = DialogProgressBinding.inflate(layoutInflater)
+        mProgressDialog.setContentView(binding.root)
+
+        mProgressDialog.show()
+    }
+
+    fun hideProgressDialog() {
+        mProgressDialog.dismiss()
+    }
+
+
+
     private val launcherGallery = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
@@ -81,7 +100,6 @@ class CameraActivity : AppCompatActivity() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
-
     private fun detectImage(uri: Uri) {
         val imageFile = uriToFile(uri, this).reduceFileImage()
         val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
@@ -94,10 +112,12 @@ class CameraActivity : AppCompatActivity() {
             if (result != null) {
                 when (result) {
                     Result.Loading -> {
-                        binding.pbCamera.visibility = View.VISIBLE
+                        //binding.pbCamera.visibility = View.VISIBLE
+                        showProgressDialog()
                     }
                     is Result.Success -> {
-                        binding.pbCamera.visibility = View.GONE
+                        //binding.pbCamera.visibility = View.GONE
+                        hideProgressDialog()
 //                            intent.putExtra(EXTRA_CAMERAX_IMAGE, uri.toString())
                         intent.putExtra(EXTRA_IMAGE_URL, result.data.image)
                         intent.putExtra(EXTRA_OUTPUT_NAME, result.data.name)
@@ -107,7 +127,8 @@ class CameraActivity : AppCompatActivity() {
 
                     }
                     is Result.Error -> {
-                        binding.pbCamera.visibility = View.GONE
+                        //binding.pbCamera.visibility = View.GONE
+                        hideProgressDialog()
                         Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
                     }
 
