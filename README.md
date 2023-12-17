@@ -48,7 +48,8 @@ Requirements
 Workflow
 ---
 1. Clone The Project and Open It in Android Studio
+   
 git clone https://github.com/OurCultureBangkit/Mobile.git
 
-2. Run or Build The App
+3. Run or Build The App
 After you open the project, wait for the Gradle to finish building first. Then you can choose to build debug app by using Run: Run'app'. Or you can build signed App by head to Build: Generate Signed Bundle/APK.
