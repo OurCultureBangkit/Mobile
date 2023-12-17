@@ -1,10 +1,12 @@
 package com.example.ourculture.ui.insertmarketplace
 
+import android.content.Context
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,6 +40,8 @@ class InsertMarketplaceActivity : AppCompatActivity() {
 
         binding.uploadButton.setOnClickListener {
             uploadImage()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
         }
 
         binding.galleryButton.setOnClickListener {
