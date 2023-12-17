@@ -39,6 +39,7 @@ OurCulture Android app is developed using Android Studio IDE. Here are component
 - Glide: Used to load and display images from various sources, including URLs, URIs, local files, and Drawable resources.
 - LiveData: Able to maintain data when configuration changes occur.
 - View Model: to help the UI controller prepare the data to be displayed to the UI.
+- Room : The Room Database is used to store data from the user's wishlist, and this data is consumed by the wishlist adapter to facilitate updates when deleting items from the wishlist.
 
 Requirements
 ---
