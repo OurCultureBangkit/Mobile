@@ -11,7 +11,7 @@ Mock-Up
 --
 Link: [https://www.figma.com/file/TNbFFpwhpEWyCQdHewoz78/figma-team?type=design&node-id=16-7&mode=design&t=k3B9VBdXWgkL3rk0-0](https://www.figma.com/file/TNbFFpwhpEWyCQdHewoz78/figma-team?type=design&node-id=16-7&mode=design&t=k3B9VBdXWgkL3rk0-0)
 
-REST API Documentation
+RESTful API Documentation
 --
 Link: [https://docs.google.com/document/d/1ca8_cRljpvR3bVRDADA0CR1qgrOWwjSroHNBPF6CQqk/edit#heading=h.3mprpr3agq37](https://docs.google.com/document/d/1ca8_cRljpvR3bVRDADA0CR1qgrOWwjSroHNBPF6CQqk/edit#heading=h.3mprpr3agq37)
 
